@@ -16,7 +16,7 @@
     </appender>
 
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>{LOGSTASH_INPUT}</destination>
+        <destination>${LOGSTASH_INPUT}</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
 
