@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: prod
+  application.name: account-server
+server:
+  shutdown: graceful
+logging:
+  config: classpath:logback/logback-${spring.profiles.active}.xml
