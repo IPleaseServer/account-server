@@ -1,3 +1,23 @@
+## Auth
+### Authorize Mail
+request
+```http request
+POST /api/v1/account/auth/email?email=*@*.*
+```
+response
+```json5
+{ }
+```
+### Authorize
+```http request
+GET /api/v1/account/auth/{authCode}
+```
+```json5
+{
+  "token": "*****" //token has type and data of Authorization
+}
+```
+
 ## Login
 ### Generate Login Token
 request
