@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.auth.util
+package site.iplease.accountserver.domain.auth.util.atomic
 
 import reactor.core.publisher.Mono
 

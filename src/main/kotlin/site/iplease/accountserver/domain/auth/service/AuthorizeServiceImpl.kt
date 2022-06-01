@@ -9,8 +9,8 @@ import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 import site.iplease.accountserver.domain.auth.config.AuthProperties
 import site.iplease.accountserver.domain.auth.data.dto.AuthDto
 import site.iplease.accountserver.domain.auth.repository.AuthCodeRepository
-import site.iplease.accountserver.domain.auth.util.AuthCodeGenerator
-import site.iplease.accountserver.domain.auth.util.AuthTokenEncoder
+import site.iplease.accountserver.domain.auth.util.atomic.AuthCodeGenerator
+import site.iplease.accountserver.domain.auth.util.atomic.AuthTokenEncoder
 import site.iplease.accountserver.infra.email.service.EmailService
 
 @Service
