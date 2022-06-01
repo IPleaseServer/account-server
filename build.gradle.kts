@@ -37,7 +37,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    //spring doc
+    implementation ("org.springdoc:springdoc-openapi-webflux-ui:1.6.8")
     //spring cloud
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
