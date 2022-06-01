@@ -22,5 +22,8 @@ class RedisAuthCodeRepository(
     override fun exist(code: String): Mono<Boolean> =
         redisTemplate.hasKey(formatKey(code))
 
+    override fun delete(code: String): Mono<Void> =
+        redisTemplate.delete(code).then()
+
     private fun formatKey(code: String) = "${authProperties.redisKeyPrefix}_$code"
 }

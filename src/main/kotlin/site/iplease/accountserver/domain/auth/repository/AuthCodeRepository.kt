@@ -7,4 +7,5 @@ interface AuthCodeRepository {
     fun insert(authCode: AuthCode): Mono<Void>
     fun select(code: String): Mono<AuthCode>
     fun exist(code: String): Mono<Boolean>
+    fun delete(code: String): Mono<Void>
 }
