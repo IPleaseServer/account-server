@@ -6,9 +6,9 @@ import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.auth.repository.AuthCodeRepository
 
 @Component
-class IntegerAuthCodePreprocessUtil(
+class IntegerAuthCodeUtil(
     private val authCodeRepository: AuthCodeRepository
-): AuthCodePreprocessUtil {
+): AuthCodeUtil {
     override fun generate(): Mono<String> = generate(generateAuthCode())
     private fun generate(codeCandidate: String): Mono<String> = authCodeRepository.exist(codeCandidate)
         .flatMap {
