@@ -22,10 +22,11 @@ class AuthorizeServiceImpl(
 ): AuthorizeService {
     private val emailProperty by lazy{ authProperties.emailProperties }
 
+    ///BusinessLogics and Endpoints
     override fun authorize(code: String): Mono<AuthTokenDto> =
         authCodeRepository.select(code) //DataStore에서 인증코드에 매핑된 Type(인증대상 종류 := Class)과 Data(인증대상 정보 := Instance)를 가져온다.
+            .flatMap { deleteAuthData(it) }//DataStore에서 인증코드 매핑정보를 제거한다.
             .flatMap { encodeAuthToken(it.type, it.data) }//가져온 Type과 Data로 인증토큰을 생성하고, 반환한다.
-
 
     private fun encodeAuthToken(type: AuthType, data: String): Mono<AuthTokenDto> =
         authTokenEncoder.encodeAuthToken(type, data)//Type과 Data로 인증토큰을 생성한다.
@@ -36,7 +37,6 @@ class AuthorizeServiceImpl(
             .flatMap { saveAuthData(AuthType.EMAIL, email, it) }//인증코드와 이메일을 매핑하여 DataStore에 저장한다.
             .map {  }//Payload가 비어있는 ResponseEntity(Status=OK)를 반환한다.
 
-
     private fun sendAuthEmail(email: String, authCode: String): Mono<String> =
         emailService.sendEmail(//인증메일을 보낸다.
             to = email,
@@ -45,12 +45,16 @@ class AuthorizeServiceImpl(
             context = mapOf("code" to authCode)
         ).map { authCode }//인증코드를 반환한다.
 
+    ///Wrap Commands of AuthData to Private method
     private fun saveAuthData(type: AuthType, data: String, code: String): Mono<String> =
         authCodeRepository.insert(
             AuthCode(//인증정보를 저장한다.
             code = code,
             type = type,
             data = data)
-        )
-        .then(code.toMono())//인증코드를 반환한다.
+        ).then(code.toMono())//인증코드를 반환한다.
+
+    private fun deleteAuthData(authCode: AuthCode) =
+        authCodeRepository.delete(code = authCode.code)//인증정보를 제거한다.
+            .then(authCode.toMono())//인증코드를 반환한다.
 }
