@@ -5,15 +5,17 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.auth.config.AuthProperties
 import site.iplease.accountserver.domain.auth.data.entity.AuthCode
+import java.time.Duration
 
 @Component
 class RedisAuthCodeRepository(
     private val redisTemplate: ReactiveRedisTemplate<String, AuthCode>,
     private val authProperties: AuthProperties
 ): AuthCodeRepository {
+    private val duration = lazy{ Duration.ofSeconds(authProperties.expireSeconds) }
     override fun insert(authCode: AuthCode): Mono<Void> =
         redisTemplate.opsForValue()
-            .set(formatKey(authCode.code), authCode)
+            .set(formatKey(authCode.code), authCode, duration.value)
             .then()
 
     override fun select(code: String): Mono<AuthCode> =
