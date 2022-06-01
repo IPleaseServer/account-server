@@ -7,10 +7,16 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties(prefix = "auth")
 data class AuthProperties (
     val redisKeyPrefix: String,
-    val emailProperties: AuthEmailProperty
+    val emailProperties: AuthEmailProperties,
+    val jwtProperties: AuthJwtProperties
 ) {
-    data class AuthEmailProperty (
+    data class AuthEmailProperties(
         val emailTitle: String,
         val templatePath: String
+    )
+    data class AuthJwtProperties(
+        val issuer: String,
+        val expireSecond: Long,
+        val secret: String
     )
 }
