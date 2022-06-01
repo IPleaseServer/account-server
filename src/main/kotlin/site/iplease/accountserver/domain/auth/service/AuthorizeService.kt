@@ -7,7 +7,7 @@ interface AuthorizeService {
     //DataStore에서 인증코드에 매핑된 Type(인증대상 종류 := Class)과 Data(인증대상 정보 := Instance)를 가져온다.
     //가져온 Type과 Data로 인증토큰을 생성한다.
     //생성한 인증토큰을 반환한다.
-    fun authorize(authCode: String): Mono<AuthTokenDto>
+    fun authorize(code: String): Mono<AuthTokenDto>
 
     //인증코드를 발급한다.
     //인증코드를 이메일로 보낸다.
