@@ -9,13 +9,14 @@ import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.auth.config.AuthProperties
 import site.iplease.accountserver.domain.auth.data.dto.AuthDto
 import site.iplease.accountserver.domain.auth.data.dto.AuthTokenDto
+import site.iplease.accountserver.domain.auth.data.type.AuthType
 import java.sql.Timestamp
 import java.time.LocalDateTime
 
 @Component
 class JwtAuthTokenUtil(
     val authProperties: AuthProperties
-): AuthTokenEncoder {
+): AuthTokenUtil {
     val jwtProperties = lazy { authProperties.jwtProperties }
 
     override fun encode(dto: AuthDto): Mono<AuthTokenDto> =
@@ -30,4 +31,12 @@ class JwtAuthTokenUtil(
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.value.secret)
                 .compact()
         }.map { AuthTokenDto(token = it) }
+
+    override fun decode(dto: AuthTokenDto): Mono<AuthDto> =
+        Jwts.parser()
+            .setSigningKey(jwtProperties.value.secret)
+            .parseClaimsJws(dto.token).body.toMono().map {
+                it.get("type", AuthType::class.java) to
+                it.get("data", String::class.java)
+            }.map { AuthDto(it.first, it.second) }
 }
