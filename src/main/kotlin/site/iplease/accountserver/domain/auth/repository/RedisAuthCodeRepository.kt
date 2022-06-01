@@ -17,7 +17,10 @@ class RedisAuthCodeRepository(
             .then()
 
     override fun select(code: String): Mono<AuthCode> =
-        redisTemplate.opsForValue().get(code)
+        redisTemplate.opsForValue().get(formatKey(code))
+
+    override fun exist(code: String): Mono<Boolean> =
+        redisTemplate.hasKey(formatKey(code))
 
     private fun formatKey(code: String) = "${authProperties.redisKeyPrefix}_$code"
 }
