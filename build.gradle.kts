@@ -46,6 +46,8 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     //database driver
     implementation("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
+    //jwt
+    implementation ("io.jsonwebtoken:jjwt:0.9.1")
     //logback
     implementation("net.logstash.logback:logstash-logback-encoder:7.1.1")
     //test
