@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
-import site.iplease.accountserver.domain.auth.entity.AuthCode
+import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 
 @Configuration
 class AuthCodeRedisConfiguration {

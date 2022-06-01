@@ -1,7 +1,7 @@
 package site.iplease.accountserver.domain.auth.repository
 
 import reactor.core.publisher.Mono
-import site.iplease.accountserver.domain.auth.entity.AuthCode
+import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 
 interface AuthCodeRepository {
     fun insert(authCode: AuthCode): Mono<Void>

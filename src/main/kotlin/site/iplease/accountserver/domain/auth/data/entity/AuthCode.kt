@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.auth.entity
+package site.iplease.accountserver.domain.auth.data.entity
 
 import site.iplease.accountserver.domain.auth.data.type.AuthType
 

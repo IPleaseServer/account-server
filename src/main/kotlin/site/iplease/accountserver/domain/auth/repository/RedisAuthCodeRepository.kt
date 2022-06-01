@@ -4,7 +4,7 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.auth.config.AuthProperties
-import site.iplease.accountserver.domain.auth.entity.AuthCode
+import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 
 @Component
 class RedisAuthCodeRepository(

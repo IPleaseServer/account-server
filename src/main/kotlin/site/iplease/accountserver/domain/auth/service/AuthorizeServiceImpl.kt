@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.auth.data.dto.AuthTokenDto
 import site.iplease.accountserver.domain.auth.data.type.AuthType
-import site.iplease.accountserver.domain.auth.entity.AuthCode
+import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 import site.iplease.accountserver.domain.auth.config.AuthProperties
 import site.iplease.accountserver.domain.auth.repository.AuthCodeRepository
 import site.iplease.accountserver.domain.auth.util.AuthCodeGenerator
@@ -46,9 +46,11 @@ class AuthorizeServiceImpl(
         ).map { authCode }//인증코드를 반환한다.
 
     private fun saveAuthData(type: AuthType, data: String, code: String): Mono<String> =
-        authCodeRepository.insert(AuthCode(//인증정보를 저장한다.
+        authCodeRepository.insert(
+            AuthCode(//인증정보를 저장한다.
             code = code,
             type = type,
-            data = data))
+            data = data)
+        )
         .then(code.toMono())//인증코드를 반환한다.
 }
