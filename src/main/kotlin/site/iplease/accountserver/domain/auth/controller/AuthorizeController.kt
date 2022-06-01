@@ -1,6 +1,7 @@
 package site.iplease.accountserver.domain.auth.controller
 
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,6 +14,7 @@ import site.iplease.accountserver.domain.auth.service.AuthorizeService
 import site.iplease.accountserver.domain.auth.validate.AuthCode
 import javax.validation.constraints.Email
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/account/auth")
 class AuthorizeController(
