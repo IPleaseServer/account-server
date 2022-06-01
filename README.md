@@ -1,5 +1,5 @@
 ## Auth
-### Authorize Mail
+### Authorize Email
 request
 ```http request
 POST /api/v1/account/auth/email?email=*@*.*
