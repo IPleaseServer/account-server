@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConstructorBinding
 data class AuthProperties (
     val redisKeyPrefix: String,
     val expireSeconds: Long,
+    val senderEmail: String,
     val emailProperties: AuthEmailProperties,
     val jwtProperties: AuthJwtProperties
 ) {
