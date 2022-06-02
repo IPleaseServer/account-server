@@ -36,7 +36,7 @@ class JwtAuthTokenUtil(
         Jwts.parser()
             .setSigningKey(jwtProperties.value.secret)
             .parseClaimsJws(dto.token).body.toMono().map {
-                it.get("type", AuthType::class.java) to
+                it.get("type", String::class.java) to
                 it.get("data", String::class.java)
-            }.map { AuthDto(it.first, it.second) }
+            }.map { AuthDto(AuthType.valueOf(it.first), it.second) }
 }
