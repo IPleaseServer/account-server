@@ -6,4 +6,5 @@ import site.iplease.accountserver.domain.register.data.entity.Account
 
 interface AccountRepository: ReactiveCrudRepository<Account, Long> {
     fun existsByEmail(email: String): Mono<Boolean>
+    fun existsByStudentNumber(studentNumber: Int): Mono<Boolean>
 }
