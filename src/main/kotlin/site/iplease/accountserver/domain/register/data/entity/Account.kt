@@ -11,7 +11,7 @@ data class Account(
     val type: AccountType,
     val name: String,
     val email: String,
-    val password: String,
+    val encodedPassword: String,
     val studentNumber: Int = 1101,
     val department: DepartmentType = DepartmentType.SOFTWARE_DEVELOP
 )
