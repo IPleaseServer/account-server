@@ -3,8 +3,8 @@ package site.iplease.accountserver.domain.register.util.atomic
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
-import site.iplease.accountserver.domain.register.data.type.PolicyType
-import site.iplease.accountserver.domain.register.exception.PolicyViolationException
+import site.iplease.accountserver.global.common.type.PolicyType
+import site.iplease.accountserver.global.common.exception.PolicyViolationException
 import site.iplease.accountserver.domain.register.repository.AccountRepository
 
 @Component
