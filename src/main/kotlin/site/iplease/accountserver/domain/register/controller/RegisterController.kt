@@ -9,26 +9,29 @@ import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.register.data.request.StudentRegisterRequest
 import site.iplease.accountserver.domain.register.data.request.TeacherRegisterRequest
 import site.iplease.accountserver.domain.register.data.response.RegisterResponse
+import site.iplease.accountserver.domain.register.service.RegisterPreprocessor
+import site.iplease.accountserver.domain.register.service.RegisterService
 import javax.validation.Valid
 
 @Validated
 @RestController
 @RequestMapping("/api/v1/account/register")
-class RegisterController {
+class RegisterController(
+    private val registerPreprocessor: RegisterPreprocessor,
+    private val registerService: RegisterService
+) {
     @PostMapping("/student")
-    fun registerStudent(@Valid request: StudentRegisterRequest): Mono<ResponseEntity<RegisterResponse>> {
-        //요청정보를 검사하고 해독한다.
-        //해독한 요청정보를 토대로 학생 회원가입 정책을 검사한다.
-        //회원정보를 구성한다.
-        //구성한 회원정보를 저장한다.
-        TODO()
-    }
+    fun registerStudent(@Valid request: StudentRegisterRequest): Mono<ResponseEntity<RegisterResponse>> =
+        registerPreprocessor.valid(request)
+            .flatMap { registerPreprocessor.decode(request) }
+            .flatMap { registerService.registerStudent(it.first, it.second) }
+            .map { RegisterResponse(it) }
+            .map { ResponseEntity.ok(it) }
     @PostMapping("/teacher")
-    fun registerTeacher(@Valid request: TeacherRegisterRequest): Mono<ResponseEntity<RegisterResponse>> {
-        //요청정보를 검사하고 해독한다.
-        //해독한 요청정보를 토대로 교사 회원가입 정책을 검사한다.
-        //회원정보를 구성한다.
-        //구성한 회원정보를 저장한다.
-        TODO()
-    }
+    fun registerTeacher(@Valid request: TeacherRegisterRequest): Mono<ResponseEntity<RegisterResponse>> =
+        registerPreprocessor.valid(request)
+            .flatMap { registerPreprocessor.decode(request) }
+            .flatMap { registerService.registerTeacher(it.first, it.second) }
+            .map { RegisterResponse(it) }
+            .map { ResponseEntity.ok(it) }
 }
