@@ -16,7 +16,7 @@ class RegisterServiceImpl(
 ): RegisterService {
     override fun registerStudent(common: CommonRegisterDto, student: StudentAdditionalRegisterDto): Mono<Long> =
         registerPolicyService.checkCommonPolicy(common)//회원가입 정책을 검사한다.
-            .map { registerPolicyService.checkStudentPolicy(student) }
+            .flatMap { registerPolicyService.checkStudentPolicy(student) }
             .map { Account(//회원정보를 구성한다.
                 type = AccountType.STUDENT,
                 name = common.name, email = common.email, password = common.password,
@@ -26,11 +26,10 @@ class RegisterServiceImpl(
 
     override fun registerTeacher(common: CommonRegisterDto, teacher: TeacherAdditionalRegisterDto): Mono<Long> =
         registerPolicyService.checkCommonPolicy(common)//회원가입 정책을 검사한다.
-            .map { registerPolicyService.checkTeacherPolicy(teacher) }
+            .flatMap { registerPolicyService.checkTeacherPolicy(teacher) }
             .map { Account(//회원정보를 구성한다.
                 type = AccountType.TEACHER,
-                name = common.name, email = common.email, password = common.password,
-                teacherCode = teacher.teacherCode
+                name = common.name, email = common.email, password = common.password
             ) }.flatMap { accountRepository.save(it) }//구성한 회원정보를 저장한다.
             .map { it.id }//저장한 회원정보의 id를 반환한다.
 }

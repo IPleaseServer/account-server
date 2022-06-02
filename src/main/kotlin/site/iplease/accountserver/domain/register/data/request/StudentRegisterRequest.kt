@@ -10,6 +10,6 @@ data class StudentRegisterRequest (
     val emailToken: String,
     val password: String,
     @field:Pattern(regexp = "[0-3][1-4][0-2][0-9]")
-    val studentNumber: Int,
+    val studentNumber: String,
     val department: DepartmentType
 )

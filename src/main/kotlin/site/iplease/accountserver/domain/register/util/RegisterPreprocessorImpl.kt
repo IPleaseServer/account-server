@@ -28,8 +28,8 @@ class RegisterPreprocessorImpl(
         validEmailToken(request.emailToken) //이메일 토큰값을 검증한다.
 
     //학번과 학과를 검증한다.
-    private fun validDepartmentAndStudentNumber(department: DepartmentType, studentNumber: Int): Mono<Unit> {
-        fun getClass(studentNumber: Int) = studentNumber % 1000 / 100
+    private fun validDepartmentAndStudentNumber(department: DepartmentType, studentNumber: String): Mono<Unit> {
+        fun getClass(studentNumber: String) = studentNumber[1].toString().toInt()
         return department.toMono()
             .map { it.classes.contains(getClass(studentNumber)) }
             .flatMap {
@@ -49,7 +49,7 @@ class RegisterPreprocessorImpl(
     override fun decode(request: StudentRegisterRequest): Mono<Pair<CommonRegisterDto, StudentAdditionalRegisterDto>> =
         decodeAuthToken(request.emailToken) //이메일토큰을 해독한다.
             .map { CommonRegisterDto(name = request.name, email = it.data, password = request.password) } //해독한 값들을 통해 CommonRegisterDto를 구성한다.
-            .map { it to StudentAdditionalRegisterDto(studentNumber = request.studentNumber, department = request.department) } //해독한 값들을 통해 TeacherAdditionalRegisterDto를 구성하고 반환한다.
+            .map { it to StudentAdditionalRegisterDto(studentNumber = request.studentNumber.toInt(), department = request.department) } //해독한 값들을 통해 TeacherAdditionalRegisterDto를 구성하고 반환한다.
 
     override fun decode(request: TeacherRegisterRequest): Mono<Pair<CommonRegisterDto, TeacherAdditionalRegisterDto>> =
         decodeAuthToken(request.emailToken) //이메일토큰을 해독한다.
