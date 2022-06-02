@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.register.service
+package site.iplease.accountserver.domain.register.util
 
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.register.data.dto.CommonRegisterDto

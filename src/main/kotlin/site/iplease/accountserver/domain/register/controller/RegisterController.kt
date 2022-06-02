@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.register.data.request.StudentRegisterRequest
 import site.iplease.accountserver.domain.register.data.request.TeacherRegisterRequest
 import site.iplease.accountserver.domain.register.data.response.RegisterResponse
-import site.iplease.accountserver.domain.register.service.RegisterPreprocessor
+import site.iplease.accountserver.domain.register.util.RegisterPreprocessor
 import site.iplease.accountserver.domain.register.service.RegisterService
 import javax.validation.Valid
 
