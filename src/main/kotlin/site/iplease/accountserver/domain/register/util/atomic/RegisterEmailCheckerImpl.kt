@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.register.util
+package site.iplease.accountserver.domain.register.util.atomic
 
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
