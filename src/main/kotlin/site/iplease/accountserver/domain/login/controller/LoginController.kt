@@ -2,7 +2,6 @@ package site.iplease.accountserver.domain.login.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -38,7 +37,7 @@ class LoginController(
     //재발급 토큰을 검사하여, 정보에 해당하는 유저를 가져온다.
     //가져온 유저의 정보를 통해 로그인토큰을 생성한다.
     //작성한 login token을 반환한다.
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     fun refreshLogin(@RequestBody @Valid request: RefreshLoginRequest): Mono<ResponseEntity<LoginTokenResponse>> =
         loginService.refreshLogin(request.refreshToken)
             .map { LoginTokenResponse(accessToken = it.accessToken, refreshToken = it.refreshToken) }
