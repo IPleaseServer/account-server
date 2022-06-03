@@ -1,4 +1,13 @@
 ## Auth
+### Authorize Teacher
+request
+```http request
+POST /api/v1/account/auth/teacher?identifier=* //교사인증기에서 인증코드를 가져오기위한 key값
+```
+response
+```json5
+{ }
+```
 ### Authorize Email
 request
 ```http request
