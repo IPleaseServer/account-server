@@ -13,6 +13,10 @@ interface AuthorizeService {
     //인증코드를 발급한다.
     //인증코드를 이메일로 보낸다.
     //인증코드와 이메일을 매핑하여 DataStore에 저장한다.
-    //Payload가 비어있는 ResponseEntity(Status=OK)를 반환한다.
     fun authorizeEmail(email: String): Mono<Unit>
+
+    //인증코드를 발급한다.
+    //인증코드를 identifier로 교사인증기에 보낸다.
+    //identifier와 인증코드를 DataStore에 저장한다.
+    fun authorizeTeacher(identifier: String): Mono<Unit>
 }

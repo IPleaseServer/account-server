@@ -28,6 +28,11 @@ class AuthorizeController(
 
     @PostMapping("/email")
     fun authorizeEmail(@RequestParam @Email email: String): Mono<ResponseEntity<Unit>> =
-        authorizeService.authorizeEmail(email)
-            .map { ResponseEntity.ok(it) }
+        authorizeService.authorizeEmail(email)//이메일 인증로직을 수행한다.
+            .map { ResponseEntity.ok(it) }//Payload가 비어있는 ResponseEntity(Status=OK)를 반환한다.
+
+    @PostMapping("/teacher")
+    fun authorizeTeacher(@RequestParam identifier: String): Mono<ResponseEntity<Unit>> =
+        authorizeService.authorizeTeacher(identifier)//교사 인증로직을 수행한다.
+            .map { ResponseEntity.ok(it) }//Payload가 비어있는 ResponseEntity(Status=OK)를 반환한다.
 }
