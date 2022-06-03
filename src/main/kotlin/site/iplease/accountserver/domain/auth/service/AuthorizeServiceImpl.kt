@@ -12,6 +12,7 @@ import site.iplease.accountserver.domain.auth.repository.AuthCodeRepository
 import site.iplease.accountserver.domain.auth.util.atomic.AuthCodeGenerator
 import site.iplease.accountserver.domain.auth.util.atomic.AuthTokenEncoder
 import site.iplease.accountserver.infra.email.service.EmailService
+import site.iplease.accountserver.infra.teacher_code.service.TeacherAuthorizerService
 
 @Service
 class AuthorizeServiceImpl(
@@ -20,6 +21,7 @@ class AuthorizeServiceImpl(
     private val authCodeRepository: AuthCodeRepository,
     private val authTokenEncoder: AuthTokenEncoder,
     private val emailService: EmailService,
+    private val teacherAuthorizerService: TeacherAuthorizerService
 ): AuthorizeService {
     private val emailProperty by lazy{ authProperties.emailProperties }
 
@@ -37,7 +39,21 @@ class AuthorizeServiceImpl(
             .flatMap { sendAuthEmail(email, it) }//인증코드를 이메일로 보낸다.
             .map { AuthCode(it, AuthType.EMAIL, email) }//인증코드와 이메일을 매핑한다.
             .flatMap { saveAuthData(it) }//매핑한 데이터를 DataStore에 저장한다.
-            .map {  }//Payload가 비어있는 ResponseEntity(Status=OK)를 반환한다.
+            .map {  }
+
+    override fun authorizeTeacher(identifier: String): Mono<Unit> =
+        authCodeGenerator.generate()//인증코드를 발급한다.
+            .flatMap { sendAuthIdentifier(identifier, it) }//인증코드를 identifier로 교사인증기에 보낸다.
+            .map { AuthCode(it, AuthType.TEACHER, identifier) }//identifier와 인증코드를 매핑한다.
+            .flatMap { saveAuthData(it) }//매핑한 데이터를 DataStore에 저장한다.
+            .map {  }
+
+
+    private fun sendAuthIdentifier(identifier: String, authCode: String): Mono<String> =
+        teacherAuthorizerService.sendData(
+            key = identifier,
+            value = authCode
+        ).map { authCode }
 
     private fun sendAuthEmail(email: String, authCode: String): Mono<String> =
         emailService.sendEmail(//인증메일을 보낸다.
