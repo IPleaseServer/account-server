@@ -47,6 +47,6 @@ class LoginServiceImpl(
     private fun generateLoginToken(account: Account): Mono<LoginTokenDto> =
         accessTokenEncoder.generate(account)
             .flatMap { access ->
-                refreshTokenEncoder.generate(account).map { refresh -> access to refresh }
+                refreshTokenEncoder.encode(account).map { refresh -> access to refresh }
             }.map { LoginTokenDto(it.first, it.second) }
 }

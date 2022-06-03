@@ -4,5 +4,5 @@ import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.register.data.entity.Account
 
 interface RefreshTokenEncoder {
-    fun generate(account: Account): Mono<String>
+    fun encode(account: Account): Mono<String>
 }
