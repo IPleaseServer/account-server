@@ -15,7 +15,7 @@ import site.iplease.accountserver.domain.login.data.entity.RefreshToken
 @Configuration
 class RefreshTokenRedisConfiguration {
     @Bean //TODO ObjectMapper 빈으로 등록하여 로직 분리
-    fun reactiveRedisTemplate(connectionFactory: ReactiveRedisConnectionFactory): ReactiveRedisTemplate<String, RefreshToken> =
+    fun refreshTokenReactiveRedisTemplate(connectionFactory: ReactiveRedisConnectionFactory): ReactiveRedisTemplate<String, RefreshToken> =
         ObjectMapper().registerKotlinModule().registerModule(JavaTimeModule())
             .let {  Jackson2JsonRedisSerializer(RefreshToken::class.java).apply { setObjectMapper(it) } }
             .let { (StringRedisSerializer() to it) }

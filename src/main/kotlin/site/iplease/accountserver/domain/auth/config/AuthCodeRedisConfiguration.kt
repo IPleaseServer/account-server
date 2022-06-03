@@ -15,7 +15,7 @@ import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 @Configuration
 class AuthCodeRedisConfiguration {
     @Bean //TODO ObjectMapper 빈으로 등록하여 로직 분리
-    fun reactiveRedisTemplate(connectionFactory: ReactiveRedisConnectionFactory): ReactiveRedisTemplate<String, AuthCode> =
+    fun authCodeReactiveRedisTemplate(connectionFactory: ReactiveRedisConnectionFactory): ReactiveRedisTemplate<String, AuthCode> =
         ObjectMapper().registerKotlinModule().registerModule(JavaTimeModule())
             .let {  Jackson2JsonRedisSerializer(AuthCode::class.java).apply { setObjectMapper(it) } }
             .let { (StringRedisSerializer() to it) }
