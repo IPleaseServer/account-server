@@ -3,6 +3,7 @@ package site.iplease.accountserver.domain.login.util
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
+import site.iplease.accountserver.domain.login.data.entity.RefreshToken
 import site.iplease.accountserver.domain.login.repository.RefreshTokenRepository
 import site.iplease.accountserver.domain.register.data.entity.Account
 import site.iplease.accountserver.global.common.exception.PolicyViolationException
@@ -20,6 +21,10 @@ class UuidRefreshTokenUtil(
                 else Mono.error(PolicyViolationException(PolicyType.LOGIN_REFRESH_TOKEN, "존재하지 않는 재발급토큰입니다. - $refreshToken"))
             }.map { it.accountId }
 
-    override fun generate(account: Account): Mono<String> = generateRefreshToken().toMono()
+    override fun encode(account: Account): Mono<String> = generateRefreshToken()
+        .let {
+            refreshTokenRepository.insert(RefreshToken(token = it, accountId = account.id))
+                .then(it.toMono())
+        }
     private fun generateRefreshToken() = UUID.randomUUID().toString()
 }
