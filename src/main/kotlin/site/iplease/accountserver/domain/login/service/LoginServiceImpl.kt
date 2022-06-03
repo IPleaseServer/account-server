@@ -3,18 +3,18 @@ package site.iplease.accountserver.domain.login.service
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.login.data.dto.LoginTokenDto
-import site.iplease.accountserver.domain.login.util.AccessTokenGenerator
-import site.iplease.accountserver.domain.login.util.LoginDataDecoder
-import site.iplease.accountserver.domain.login.util.RefreshTokenDecoder
-import site.iplease.accountserver.domain.login.util.RefreshTokenGenerator
+import site.iplease.accountserver.domain.login.util.atomic.AccessTokenEncoder
+import site.iplease.accountserver.domain.login.util.atomic.LoginDataDecoder
+import site.iplease.accountserver.domain.login.util.atomic.RefreshTokenDecoder
+import site.iplease.accountserver.domain.login.util.atomic.RefreshTokenEncoder
 import site.iplease.accountserver.domain.register.data.entity.Account
 import site.iplease.accountserver.domain.register.repository.AccountRepository
 
 @Service
 class LoginServiceImpl(
     private val accountRepository: AccountRepository,
-    private val accessTokenGenerator: AccessTokenGenerator,
-    private val refreshTokenGenerator: RefreshTokenGenerator,
+    private val accessTokenEncoder: AccessTokenEncoder,
+    private val refreshTokenEncoder: RefreshTokenEncoder,
     private val refreshTokenDecoder: RefreshTokenDecoder,
     private val loginDataDecoder: LoginDataDecoder
 ): LoginService {
@@ -45,8 +45,8 @@ class LoginServiceImpl(
     //작성한 refresh token을 유저의 공개정보와 매핑하여 DataStore에 일정시간 저장한다.
     //작성한 access token과 refresh token으로 login토큰을 작성한다.
     private fun generateLoginToken(account: Account): Mono<LoginTokenDto> =
-        accessTokenGenerator.generate(account)
+        accessTokenEncoder.generate(account)
             .flatMap { access ->
-                refreshTokenGenerator.generate(account).map { refresh -> access to refresh }
+                refreshTokenEncoder.generate(account).map { refresh -> access to refresh }
             }.map { LoginTokenDto(it.first, it.second) }
 }
