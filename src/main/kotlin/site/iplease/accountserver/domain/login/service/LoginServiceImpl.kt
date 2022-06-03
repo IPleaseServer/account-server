@@ -21,6 +21,7 @@ class LoginServiceImpl(
     //작성한 login token을 반환한다.
     override fun login(email: String, password: String): Mono<LoginTokenDto> =
         getAccount(email, password)
+            .flatMap { deleteRefreshToken(it.id).map { _-> it } }
             .flatMap { generateLoginToken(it) }
 
     //재발급 토큰을 검사하여, 정보에 해당하는 유저를 가져온다.
@@ -33,6 +34,9 @@ class LoginServiceImpl(
 
     private fun deleteRefreshToken(refreshToken: String): Mono<String> =
         refreshTokenRemover.remove(refreshToken)
+
+    private fun deleteRefreshToken(accountId: Long): Mono<Long> =
+        refreshTokenRemover.removeByAccountId(accountId)
 
     private fun getAccount(email: String, password: String) =
         loginDataDecoder.decode(email, password)
