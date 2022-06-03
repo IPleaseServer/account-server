@@ -26,5 +26,9 @@ class UuidRefreshTokenUtil(
             refreshTokenRepository.insert(RefreshToken(token = it, accountId = account.id))
                 .then(it.toMono())
         }
+
+    override fun remove(token: String): Mono<String> =
+        refreshTokenRepository.delete(token).then(token.toMono())
+
     private fun generateRefreshToken() = UUID.randomUUID().toString()
 }
