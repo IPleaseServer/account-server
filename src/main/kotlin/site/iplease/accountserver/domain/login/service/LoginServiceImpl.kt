@@ -3,16 +3,14 @@ package site.iplease.accountserver.domain.login.service
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.login.data.dto.LoginTokenDto
-import site.iplease.accountserver.domain.login.util.atomic.AccessTokenEncoder
-import site.iplease.accountserver.domain.login.util.atomic.LoginDataDecoder
-import site.iplease.accountserver.domain.login.util.atomic.RefreshTokenDecoder
-import site.iplease.accountserver.domain.login.util.atomic.RefreshTokenEncoder
+import site.iplease.accountserver.domain.login.util.atomic.*
 import site.iplease.accountserver.domain.register.data.entity.Account
 import site.iplease.accountserver.domain.register.repository.AccountRepository
 
 @Service
 class LoginServiceImpl(
     private val accountRepository: AccountRepository,
+    private val refreshTokenRemover: RefreshTokenRemover,
     private val accessTokenEncoder: AccessTokenEncoder,
     private val refreshTokenEncoder: RefreshTokenEncoder,
     private val refreshTokenDecoder: RefreshTokenDecoder,
@@ -30,7 +28,11 @@ class LoginServiceImpl(
     //작성한 login token을 반환한다.
     override fun refreshLogin(refreshToken: String): Mono<LoginTokenDto> =
         getAccount(refreshToken)
+            .flatMap { deleteRefreshToken(refreshToken).map { _-> it } }
             .flatMap { generateLoginToken(it) }
+
+    private fun deleteRefreshToken(refreshToken: String): Mono<String> =
+        refreshTokenRemover.remove(refreshToken)
 
     private fun getAccount(email: String, password: String) =
         loginDataDecoder.decode(email, password)
