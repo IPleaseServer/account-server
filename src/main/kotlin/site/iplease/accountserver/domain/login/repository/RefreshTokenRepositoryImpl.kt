@@ -26,5 +26,8 @@ class RefreshTokenRepositoryImpl(
     override fun exist(token: String): Mono<Boolean> =
         redisTemplate.hasKey(format(token))
 
+    override fun delete(token: String): Mono<Void> =
+        redisTemplate.delete(format(token)).then()
+
     private fun format(token: String) = "refresh_token_$token"
 }

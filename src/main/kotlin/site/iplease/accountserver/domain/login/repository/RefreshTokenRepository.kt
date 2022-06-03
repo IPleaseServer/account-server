@@ -7,4 +7,5 @@ interface RefreshTokenRepository {
     fun insert(authCode: RefreshToken): Mono<Void>
     fun select(token: String): Mono<RefreshToken>
     fun exist(token: String): Mono<Boolean>
+    fun delete(token: String): Mono<Void>
 }
