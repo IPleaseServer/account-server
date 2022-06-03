@@ -17,17 +17,32 @@ class RefreshTokenRepositoryImpl(
     override fun insert(authCode: RefreshToken): Mono<Void> =
         redisTemplate.opsForValue()
             .set(format(authCode.token), authCode, duration.value)
-            .then()
+            .flatMap {
+                redisTemplate.opsForValue()
+                    .set(formatIdTable(authCode.accountId), authCode, duration.value)
+            }.then()
 
     override fun select(token: String): Mono<RefreshToken> =
         redisTemplate.opsForValue()
             .get(format(token))
 
+    override fun selectByAccountId(id: Long): Mono<RefreshToken> =
+        redisTemplate.opsForValue()
+            .get(formatIdTable(id))
+
     override fun exist(token: String): Mono<Boolean> =
         redisTemplate.hasKey(format(token))
 
     override fun delete(token: String): Mono<Void> =
-        redisTemplate.delete(format(token)).then()
+        select(token).flatMap {
+            redisTemplate.delete(format(token), formatIdTable(it.accountId))
+                .then()
+        }
+
+    override fun deleteByAccountId(id: Long): Mono<Void> =
+        selectByAccountId(id)
+            .flatMap { delete(it.token) }
 
     private fun format(token: String) = "refresh_token_$token"
+    private fun formatIdTable(accountId: Long) = "refresh_token_by_account_id_$accountId"
 }
