@@ -12,6 +12,7 @@ class LoginServiceImpl(
     private val accountRepository: AccountRepository,
     private val refreshTokenRemover: RefreshTokenRemover,
     private val accessTokenEncoder: AccessTokenEncoder,
+    private val accessTokenDecoder: AccessTokenDecoder,
     private val refreshTokenEncoder: RefreshTokenEncoder,
     private val refreshTokenDecoder: RefreshTokenDecoder,
     private val loginDataDecoder: LoginDataDecoder
@@ -31,6 +32,13 @@ class LoginServiceImpl(
         getAccount(refreshToken)
             .flatMap { deleteRefreshToken(refreshToken).map { _-> it } }
             .flatMap { generateLoginToken(it) }
+
+    //액세스 토큰을 검사하여, 정보에 해당하는 유저를 가져온다.
+    //유저의 정보를 통해 재발급 토큰을 삭제한다.
+    override fun logout(accessToken: String): Mono<Unit> =
+        accessTokenDecoder.decode(accessToken)
+            .flatMap { refreshTokenRemover.removeByAccountId(it) }
+            .map {  }
 
     private fun deleteRefreshToken(refreshToken: String): Mono<String> =
         refreshTokenRemover.remove(refreshToken)

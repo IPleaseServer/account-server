@@ -24,7 +24,7 @@ class JwtAccessTokenUtil(
                 .setIssuer(jwtProperties.value.issuer)
                 .setIssuedAt(Timestamp.valueOf(it))
                 .setExpiration(Timestamp.valueOf(it.plusSeconds(jwtProperties.value.expireSeconds)))
-                .claim("id", account.id)
+                .claim("id", account.id.toString())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.value.secret)
                 .compact()
         }
@@ -33,5 +33,5 @@ class JwtAccessTokenUtil(
         Jwts.parser()
             .setSigningKey(jwtProperties.value.secret)
             .parseClaimsJws(token).body.toMono()
-            .map { it.get("id", Long::class.java) }
+            .map { it.get("id", String::class.java).toLong() }
 }
