@@ -8,7 +8,7 @@ import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegi
 import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegisterDto
 import site.iplease.accountserver.domain.register.data.entity.Account
 import site.iplease.accountserver.domain.register.data.type.AccountType
-import site.iplease.accountserver.domain.register.repository.AccountRepository
+import site.iplease.accountserver.global.register.repository.AccountRepository
 
 @Service
 class RegisterServiceImpl(
