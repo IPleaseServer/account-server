@@ -10,6 +10,6 @@ data class ProfileDto (
     val name: String,
     val email: String,
     val profileImage: URI,
-    val schoolNumber: Int,
+    val studentNumber: Int,
     val department: DepartmentType
 )

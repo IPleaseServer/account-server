@@ -44,7 +44,7 @@ class ProfileController(
             ),
             teacher = if(type == AccountType.TEACHER) TeacherProfileResponse() else null,
             student = if(type == AccountType.STUDENT) StudentProfileResponse(
-                schoolNumber = schoolNumber,
+                studentNumber = studentNumber,
                 department = department
             ) else null
         )

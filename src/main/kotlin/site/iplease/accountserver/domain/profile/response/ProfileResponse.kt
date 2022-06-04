@@ -18,7 +18,7 @@ data class CommonProfileResponse (
 )
 
 data class StudentProfileResponse (
-    val schoolNumber: Int,
+    val studentNumber: Int,
     val department: DepartmentType
 )
 
