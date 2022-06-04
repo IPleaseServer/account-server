@@ -114,7 +114,11 @@ response
 ### Get My Profile
 request
 ```http request
-GRPC getProfileByLoginToken(loginToken: String)
+GET /api/v1/account/profile
+Authorization: "액세스 토큰"
+```
+```http request
+GRPC getProfileByAccessToken(accessToken: String)
 ```
 response
 ```json5
@@ -137,6 +141,9 @@ response
 ```
 ### Get Profile
 request
+```http request
+GET /api/v1/account/profile/{id}
+```
 ```http request
 GRPC getProfileById(accountId: Long)
 ```
