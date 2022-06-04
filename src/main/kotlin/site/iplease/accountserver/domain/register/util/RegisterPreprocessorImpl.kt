@@ -6,7 +6,7 @@ import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.auth.data.dto.AuthDto
 import site.iplease.accountserver.domain.auth.data.dto.AuthTokenDto
 import site.iplease.accountserver.domain.auth.data.type.AuthType
-import site.iplease.accountserver.domain.auth.util.atomic.AuthTokenDecoder
+import site.iplease.accountserver.global.auth.util.atomic.AuthTokenDecoder
 import site.iplease.accountserver.domain.register.data.dto.CommonRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegisterDto
