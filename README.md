@@ -61,6 +61,17 @@ response
 }
 ```
 
+### Logout
+request
+```http request
+GET /api/v1/account/logout
+Authorization: "액세스 토큰"
+```
+response
+```json5
+{ }
+```
+
 ##Register
 ### Register Student
 request
