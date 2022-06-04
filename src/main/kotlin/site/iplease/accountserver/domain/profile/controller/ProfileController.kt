@@ -24,7 +24,8 @@ class ProfileController(
 ) {
     @GetMapping
     fun getMyProfile(@RequestHeader authorization: String): Mono<ResponseEntity<ProfileResponse>> =
-        profileService.getProfileByAccessToken(authorization.substring("Bearer ".length))
+        authorization.substring("Bearer ".length)//액세스 토큰을 추출한다.
+            .let { profileService.getProfileByAccessToken(it) }
             .map { it.toResponse() }
             .map { ResponseEntity.ok(it) }
     @GetMapping("/{accountId}")
