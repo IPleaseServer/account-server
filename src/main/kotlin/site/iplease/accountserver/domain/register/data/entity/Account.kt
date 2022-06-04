@@ -2,7 +2,7 @@ package site.iplease.accountserver.domain.register.data.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
-import site.iplease.accountserver.domain.register.data.type.AccountType
+import site.iplease.accountserver.global.register.data.type.AccountType
 import site.iplease.accountserver.domain.register.data.type.DepartmentType
 
 @Table
