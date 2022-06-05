@@ -24,6 +24,18 @@ repositories {
 extra["springCloudVersion"] = "2021.0.3"
 
 dependencies {
+    //armeria
+    implementation(platform("com.linecorp.armeria:armeria-bom:1.16.0"))
+    implementation("com.linecorp.armeria:armeria")
+    implementation("com.linecorp.armeria:armeria-grpc")
+    implementation("com.linecorp.armeria:armeria-spring-boot2-webflux-starter")
+    //grpc
+    implementation("io.grpc:grpc-protobuf:1.45.1")
+    implementation("io.grpc:grpc-stub:1.45.1")
+    implementation("com.salesforce.servicelibs:reactor-grpc-stub:1.2.3")
+    //annotation
+    compileOnly("javax.annotation:javax.annotation-api:1.3.2")
+    compileOnly("jakarta.annotation:jakarta.annotation-api:2.0.0")
     //kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
