@@ -51,6 +51,13 @@ class ProfileGrpcConverterImpl: ProfileGrpcConverter {
                     GTeacherProfileData.newBuilder().build()
                 ) } }.build()
 
+    override fun error(status: GErrorType, msg: String): GProfileResponse =
+        GProfileResponse.newBuilder()
+            .setStatus(status)
+            .setMessage(msg)
+            .setNull(NullValue.NULL_VALUE)
+            .build()
+
     private fun toGDepartmentType(department: DepartmentType): GDepartmentType =
         when(department) {
             DepartmentType.SMART_IOT -> GDepartmentType.SMART_IOT
