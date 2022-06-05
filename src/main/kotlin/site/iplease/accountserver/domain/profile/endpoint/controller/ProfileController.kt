@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.profile.controller
+package site.iplease.accountserver.domain.profile.endpoint.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
