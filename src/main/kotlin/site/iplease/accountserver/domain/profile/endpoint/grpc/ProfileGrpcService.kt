@@ -6,11 +6,13 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureException
 import io.jsonwebtoken.UnsupportedJwtException
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.profile.service.ProfileService
 import site.iplease.accountserver.domain.profile.util.ProfileGrpcConverter
 import site.iplease.accountserver.global.common.exception.PolicyViolationException
+import site.iplease.accountserver.global.common.exception.UnknownAccountException
 import site.iplease.accountserver.lib.GErrorType
 import site.iplease.accountserver.lib.GProfileResponse
 import site.iplease.accountserver.lib.ReactorProfileServiceGrpc.ProfileServiceImplBase
@@ -20,6 +22,8 @@ class ProfileGrpcService(
     val profileService: ProfileService,
     val profileGrpcConverter: ProfileGrpcConverter
 ): ProfileServiceImplBase() {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     override fun getProfileByAccessToken(request: Mono<StringValue>): Mono<GProfileResponse> =
         request.map { it.value }
             .flatMap { profileService.getProfileByAccessToken(it) }
@@ -39,6 +43,8 @@ class ProfileGrpcService(
             .onErrorReturn(UnsupportedJwtException::class.java, GErrorType.CLIENT_ERROR, "지원하지 않는 Jwt토큰입니다!")
             .onErrorReturn(IllegalArgumentException::class.java, GErrorType.CLIENT_ERROR, "잘못된 Jwt토큰입니다!")
             .onErrorReturn(PolicyViolationException::class.java, GErrorType.CLIENT_ERROR, "정책을 위반하였습니다!")
+            .onErrorReturn(UnknownAccountException::class.java, GErrorType.CLIENT_ERROR, "프로필을 조회할 계정을 찾을 수 없습니다!")
+            .doOnError{ logger.warn("오류가 발생하였습니다! - ${it.message}") }
             .onErrorReturn(profileGrpcConverter.error(GErrorType.UNKNOWN_ERROR, "알 수 없는 오류가 발생하였습니다!"))
 
     private fun <E: Throwable> Mono<GProfileResponse>.onErrorReturn(java: Class<E>, status: GErrorType, msg: String) =
