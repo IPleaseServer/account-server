@@ -1,9 +1,6 @@
 package site.iplease.accountserver.domain.profile.util
 
-import com.google.protobuf.Int32Value
-import com.google.protobuf.Int64Value
 import com.google.protobuf.NullValue
-import com.google.protobuf.StringValue
 import org.springframework.stereotype.Component
 import site.iplease.accountserver.domain.profile.dto.ProfileDto
 import site.iplease.accountserver.global.register.data.type.AccountType
@@ -14,6 +11,8 @@ import site.iplease.accountserver.lib.*
 class ProfileGrpcConverterImpl: ProfileGrpcConverter {
     override fun toGrpcResponse(dto: ProfileDto): GProfileResponse =
         GProfileResponse.newBuilder()
+            .setStatus(GErrorType.SUCCESS)
+            .setMessage("프로필 조회에 성공하였습니다!")
             .setValue(
                 GProfileData.newBuilder()
                     .setType(toGAccountType(dto.type))
@@ -27,10 +26,10 @@ class ProfileGrpcConverterImpl: ProfileGrpcConverter {
         GCommonProfileResponse.newBuilder()
             .setValue(
                 GCommonProfileData.newBuilder()
-                    .setAccountId(Int64Value.of(dto.accountId))
-                    .setName(StringValue.of(dto.name))
-                    .setEmail(StringValue.of(dto.email))
-                    .setProfileImage(StringValue.of(dto.profileImage.toString()))
+                    .setAccountId(dto.accountId)
+                    .setName(dto.name)
+                    .setEmail(dto.email)
+                    .setProfileImage(dto.profileImage.toString())
                     .build()
             ).build()
 
@@ -40,7 +39,7 @@ class ProfileGrpcConverterImpl: ProfileGrpcConverter {
                 AccountType.TEACHER -> it.setNull(NullValue.NULL_VALUE)
                 AccountType.STUDENT -> it.setValue(
                     GStudentProfileData.newBuilder()
-                        .setStudentNumber(Int32Value.of(dto.studentNumber))
+                        .setStudentNumber(dto.studentNumber)
                         .setDepartment(toGDepartmentType(dto.department))
                 ) } }.build()
 

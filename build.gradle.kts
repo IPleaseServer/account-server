@@ -25,7 +25,7 @@ extra["springCloudVersion"] = "2021.0.3"
 
 dependencies {
     //proto-lib
-    implementation(files("libs/proto-lib-1.0.0-rc1.jar"))
+    implementation(files("libs/proto-lib-1.0.1-rc1.jar"))
     //armeria
     implementation(platform("com.linecorp.armeria:armeria-bom:1.16.0"))
     implementation("com.linecorp.armeria:armeria")
