@@ -13,9 +13,11 @@ service ProfileService {
 }
 
 message GProfileResponse {
+  GErrorType status = 1;
+  string message = 2;
   oneof data {
-    google.protobuf.NullValue null = 1;
-    GProfileData value = 2;
+    google.protobuf.NullValue null = 3;
+    GProfileData value = 4;
   }
 }
 message GProfileData {
@@ -31,10 +33,10 @@ message GCommonProfileResponse {
   }
 }
 message GCommonProfileData {
-  google.protobuf.Int64Value accountId = 1;
-  google.protobuf.StringValue name = 2;
-  google.protobuf.StringValue email = 3;
-  google.protobuf.StringValue profileImage = 4;
+  int64 accountId = 1;
+  string name = 2;
+  string email = 3;
+  string profileImage = 4;
 }
 
 message GStudentProfileResponse {
@@ -44,7 +46,7 @@ message GStudentProfileResponse {
   }
 }
 message GStudentProfileData {
-  google.protobuf.Int32Value studentNumber = 1;
+  int32 studentNumber = 1;
   GDepartmentType department = 2;
 }
 
@@ -64,4 +66,11 @@ enum GDepartmentType {
 enum GAccountType {
   STUDENT = 0;
   TEACHER = 1;
+}
+
+enum GErrorType {
+  SUCCESS = 0;
+  CLIENT_ERROR = 1;
+  SERVER_ERROR = 2;
+  UNKNOWN_ERROR = 3;
 }
