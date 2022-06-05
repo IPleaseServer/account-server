@@ -1,11 +1,11 @@
-package site.iplease.accountserver.domain.profile.advice
+package site.iplease.accountserver.domain.profile.endpoint.advice
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
-import site.iplease.accountserver.domain.profile.controller.ProfileController
+import site.iplease.accountserver.domain.profile.endpoint.controller.ProfileController
 import site.iplease.accountserver.global.common.exception.UnknownAccountException
 
 @RestControllerAdvice(basePackageClasses = [ProfileController::class])
