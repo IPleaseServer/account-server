@@ -5,7 +5,8 @@ import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.login.data.dto.LoginTokenDto
 import site.iplease.accountserver.domain.login.util.atomic.*
 import site.iplease.accountserver.domain.register.data.entity.Account
-import site.iplease.accountserver.domain.register.repository.AccountRepository
+import site.iplease.accountserver.global.login.util.atomic.AccessTokenDecoder
+import site.iplease.accountserver.global.register.repository.AccountRepository
 
 @Service
 class LoginServiceImpl(

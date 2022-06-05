@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.global.common.type.PolicyType
 import site.iplease.accountserver.global.common.exception.PolicyViolationException
-import site.iplease.accountserver.domain.register.repository.AccountRepository
+import site.iplease.accountserver.global.register.repository.AccountRepository
 
 @Component
 class RegisterEmailCheckerImpl(

@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.register.repository
+package site.iplease.accountserver.global.register.repository
 
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Mono

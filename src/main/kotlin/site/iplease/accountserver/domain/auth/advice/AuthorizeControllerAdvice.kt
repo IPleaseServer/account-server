@@ -6,15 +6,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.auth.controller.AuthorizeController
+import site.iplease.accountserver.global.error.ErrorResponse
+import site.iplease.accountserver.global.error.ErrorStatus
 import site.iplease.accountserver.infra.teacher_code.exception.TeacherAuthorizerDuplicatedKeyException
 import javax.validation.ConstraintViolationException
 
 @RestControllerAdvice(basePackageClasses = [AuthorizeController::class])
 class AuthorizeControllerAdvice {
-    //TODO 나중에 ErrorResponse 반환하도록 수정하기
     @ExceptionHandler(ConstraintViolationException::class)
-    fun handle(e: ConstraintViolationException): Mono<ResponseEntity<String>> = ResponseEntity.ok(e.localizedMessage).toMono()
+    fun handle(e: ConstraintViolationException): Mono<ResponseEntity<ErrorResponse>> = ResponseEntity.ok(
+        ErrorResponse(
+            status = ErrorStatus.CONSTRAINT_VIOLATION_ERROR,
+            message = "DB 제약조건을 위반하였습니다.",
+            detail = e.localizedMessage
+        )).toMono()
 
     @ExceptionHandler(TeacherAuthorizerDuplicatedKeyException::class)
-    fun handle(e: TeacherAuthorizerDuplicatedKeyException): Mono<ResponseEntity<String>> = ResponseEntity.ok(e.localizedMessage).toMono()
+    fun handle(e: TeacherAuthorizerDuplicatedKeyException): Mono<ResponseEntity<ErrorResponse>> = ResponseEntity.ok(
+        ErrorResponse(
+            status = ErrorStatus.POLICY_VIOLATION_ERROR,
+            message = e.getErrorMessage(),
+            detail = e.getErrorDetail()
+        )).toMono()
 }

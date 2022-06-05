@@ -6,13 +6,13 @@ import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.auth.data.dto.AuthDto
 import site.iplease.accountserver.domain.auth.data.dto.AuthTokenDto
 import site.iplease.accountserver.domain.auth.data.type.AuthType
-import site.iplease.accountserver.domain.auth.util.atomic.AuthTokenDecoder
+import site.iplease.accountserver.global.auth.util.atomic.AuthTokenDecoder
 import site.iplease.accountserver.domain.register.data.dto.CommonRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegisterDto
 import site.iplease.accountserver.domain.register.data.request.StudentRegisterRequest
 import site.iplease.accountserver.domain.register.data.request.TeacherRegisterRequest
-import site.iplease.accountserver.domain.register.data.type.DepartmentType
+import site.iplease.accountserver.global.register.data.type.DepartmentType
 import site.iplease.accountserver.domain.register.exception.WrongDepartmentOrStudentNumberException
 import site.iplease.accountserver.domain.register.exception.WrongEmailTokenException
 
