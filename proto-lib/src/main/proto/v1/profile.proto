@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+
+option java_multiple_files = true;
+option java_package = "site.iplease.accountserver.lib";
+option java_outer_classname = "ProfileProto";
+
+service ProfileService {
+  rpc getProfileByAccessToken(google.protobuf.StringValue) returns (GProfileResponse);
+  rpc getProfileByAccountId(google.protobuf.Int64Value) returns (GProfileResponse);
+}
+
+message GProfileResponse {
+  oneof data {
+    google.protobuf.NullValue null = 1;
+    GProfileData value = 2;
+  }
+}
+message GProfileData {
+  GAccountType type = 1;
+  GCommonProfileResponse common = 2;
+  GStudentProfileResponse student = 3;
+  GTeacherProfileResponse teacher = 4;
+}
+
+message GCommonProfileResponse {
+  oneof data{
+    GCommonProfileData value = 2;
+  }
+}
+message GCommonProfileData {
+  google.protobuf.Int64Value accountId = 1;
+  google.protobuf.StringValue name = 2;
+  google.protobuf.StringValue email = 3;
+  google.protobuf.StringValue profileImage = 4;
+}
+
+message GStudentProfileResponse {
+  oneof data{
+    google.protobuf.NullValue null = 1;
+    GStudentProfileData value = 2;
+  }
+}
+message GStudentProfileData {
+  google.protobuf.Int32Value studentNumber = 1;
+  GDepartmentType department = 2;
+}
+
+message GTeacherProfileResponse {
+  oneof data{
+    google.protobuf.NullValue null = 1;
+    GTeacherProfileData value = 2;
+  }
+}
+message GTeacherProfileData {}
+
+enum GDepartmentType {
+    SMART_IOT = 0;
+    SOFTWARE_DEVELOP = 1;
+}
+
+enum GAccountType {
+  STUDENT = 0;
+  TEACHER = 1;
+}
