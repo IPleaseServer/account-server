@@ -1,6 +1,6 @@
 server:
-  port: 8080
-  address: 127.0.0.1
+  port: ${ACCOUNT_SERVER_PORT}
+  address: ${ACCOUNT_SERVER_IP}
 spring:
   rabbitmq:
     host: ${MQ_HOSTNAME}
