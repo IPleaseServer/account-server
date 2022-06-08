@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "site.iplease"
-version = "1.0.0-RELEASE"
+version = "1.0.1-RELEASE"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
@@ -25,7 +25,7 @@ extra["springCloudVersion"] = "2021.0.3"
 
 dependencies {
     //proto-lib
-    implementation(files("libs/proto-lib-1.0.1-RELEASE.jar"))
+    implementation(files("libs/proto-lib-1.0.2-rc3.jar"))
     //armeria
     implementation(platform("com.linecorp.armeria:armeria-bom:1.16.0"))
     implementation("com.linecorp.armeria:armeria")

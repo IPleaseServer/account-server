@@ -4,17 +4,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.profile.dto.ProfileDto
-import site.iplease.accountserver.domain.profile.response.CommonProfileResponse
-import site.iplease.accountserver.domain.profile.response.ProfileResponse
-import site.iplease.accountserver.domain.profile.response.StudentProfileResponse
-import site.iplease.accountserver.domain.profile.response.TeacherProfileResponse
+import site.iplease.accountserver.domain.profile.response.*
 import site.iplease.accountserver.domain.profile.service.ProfileService
-import site.iplease.accountserver.global.register.data.type.AccountType
+import site.iplease.accountserver.global.common.type.AccountType
 
 @Validated
 @RestController
@@ -22,23 +18,30 @@ import site.iplease.accountserver.global.register.data.type.AccountType
 class ProfileController(
     private val profileService: ProfileService
 ) {
-    @GetMapping
-    fun getMyProfile(@RequestHeader authorization: String): Mono<ResponseEntity<ProfileResponse>> =
-        authorization.substring("Bearer ".length)//액세스 토큰을 추출한다.
-            .let { profileService.getProfileByAccessToken(it) }
-            .map { it.toResponse() }
-            .map { ResponseEntity.ok(it) }
-    @GetMapping("/{accountId}")
-    fun getProfileByAccountId(@PathVariable accountId: Long): Mono<ResponseEntity<ProfileResponse>> =
-        profileService.getProfileByAccountId(accountId)
-            .map { it.toResponse() }
-            .map { ResponseEntity.ok(it) }
+    @GetMapping("/access-token/{token}")
+    fun getMyProfile(@PathVariable token: String): Mono<ResponseEntity<ProfileResponse>> =
+        profileService.getProfileByAccessToken(token)
+            .map { profile -> profile.toResponse() }
+            .map { response -> ResponseEntity.ok(response) }
+
+    @GetMapping("/id/{id}")
+    fun getProfileByAccountId(@PathVariable id: Long): Mono<ResponseEntity<ProfileResponse>> =
+        profileService.getProfileByAccountId(id)
+            .map { profile -> profile.toResponse() }
+            .map { response -> ResponseEntity.ok(response) }
+
+    @GetMapping("/access-token/{token}/exists")
+    fun existsMyProfile(@PathVariable token: String): Mono<ResponseEntity<ProfileExistsResponse>> =
+        profileService.existProfileByAccessToken(token)
+            .map { bool ->  ProfileExistsResponse(bool) }
+            .map { response -> ResponseEntity.ok(response) }
 
     private fun ProfileDto.toResponse() =
         ProfileResponse(
             type = type,
             common = CommonProfileResponse(
                 accountId = accountId,
+                permission = permission,
                 name = name,
                 email = email,
                 profileImage = profileImage.toString()

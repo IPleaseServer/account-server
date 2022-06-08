@@ -6,9 +6,10 @@ import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.register.data.dto.CommonRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegisterDto
-import site.iplease.accountserver.domain.register.data.entity.Account
-import site.iplease.accountserver.global.register.data.type.AccountType
-import site.iplease.accountserver.global.register.repository.AccountRepository
+import site.iplease.accountserver.global.common.entity.Account
+import site.iplease.accountserver.global.common.type.AccountType
+import site.iplease.accountserver.global.common.type.PermissionType
+import site.iplease.accountserver.global.common.repository.AccountRepository
 
 @Service
 class RegisterServiceImpl(
@@ -20,7 +21,7 @@ class RegisterServiceImpl(
         registerPolicyService.checkCommonPolicy(common)//회원가입 정책을 검사한다.
             .flatMap { registerPolicyService.checkStudentPolicy(student) }
             .map { Account(//회원정보를 구성한다.
-                type = AccountType.STUDENT,
+                type = AccountType.STUDENT, permission = PermissionType.USER,
                 name = common.name, email = common.email, encodedPassword = passwordEncoder.encode(common.password),
                 studentNumber = student.studentNumber, department = student.department
             ) }.flatMap { accountRepository.save(it) }//구성한 회원정보를 저장한다.
@@ -30,7 +31,7 @@ class RegisterServiceImpl(
         registerPolicyService.checkCommonPolicy(common)//회원가입 정책을 검사한다.
             .flatMap { registerPolicyService.checkTeacherPolicy(teacher) }
             .map { Account(//회원정보를 구성한다.
-                type = AccountType.TEACHER,
+                type = AccountType.TEACHER, permission = PermissionType.OPERATOR,
                 name = common.name, email = common.email, encodedPassword = passwordEncoder.encode(common.password),
             ) }.flatMap { accountRepository.save(it) }//구성한 회원정보를 저장한다.
             .map { it.id }//저장한 회원정보의 id를 반환한다.

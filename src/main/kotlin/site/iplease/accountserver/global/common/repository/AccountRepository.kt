@@ -1,8 +1,8 @@
-package site.iplease.accountserver.global.register.repository
+package site.iplease.accountserver.global.common.repository
 
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Mono
-import site.iplease.accountserver.domain.register.data.entity.Account
+import site.iplease.accountserver.global.common.entity.Account
 
 interface AccountRepository: ReactiveCrudRepository<Account, Long> {
     fun findByEmail(email: String): Mono<Account>
