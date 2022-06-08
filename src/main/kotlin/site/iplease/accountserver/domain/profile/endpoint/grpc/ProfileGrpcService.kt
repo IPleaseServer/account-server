@@ -36,6 +36,12 @@ class ProfileGrpcService(
             .map { profileGrpcConverter.toGrpcResponse(it) }
             .handleException()
 
+    override fun existProfileByAccountToken(request: Mono<StringValue>): Mono<GProfileResponse> =
+        request.map { it.value }
+            .flatMap { profileService.existProfileByAccessToken(it) }
+            .map { profileGrpcConverter.toGrpcResponse(it) }
+            .handleException()
+
     private fun Mono<GProfileResponse>.handleException(): Mono<GProfileResponse> =
         onErrorReturn(MalformedJwtException::class.java, GErrorType.CLIENT_ERROR, "잘못된 형식의 Jwt토큰입니다!")
             .onErrorReturn(SignatureException::class.java, GErrorType.CLIENT_ERROR, "잘못된 형식의 Jwt토큰입니다!")
