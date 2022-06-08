@@ -32,7 +32,8 @@ class ProfileServiceImpl(
 
     private fun Account.toProfileDto() =
         ProfileDto(
-            type = type, accountId = id, name = name, email = email, profileImage = URI("127.0.0.1"), //TODO Account에 ProfileImage관련 로직 추가
+            type = type, accountId = id, permission = permission,
+            name = name, email = email, profileImage = URI("127.0.0.1"), //TODO Account에 ProfileImage관련 로직 추가
             studentNumber = studentNumber, department = department
         )
 }
