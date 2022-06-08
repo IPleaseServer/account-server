@@ -23,12 +23,20 @@ class ProfileServiceImpl(
         getAccountByAccountId(accountId)//accountId를 통해 계정의 프로필을 가져온다.
             .map { it.toProfileDto() }//프로필을 반환한다.
 
+    override fun existProfileByAccessToken(accessToken: String): Mono<Boolean> =
+        accessTokenDecoder.decode(accessToken)
+            .flatMap { existAccountByAccountId(it) }
+            .onErrorReturn(false)
+
     private fun getAccountByAccountId(accountId: Long) =
-        accountRepository.existsById(accountId)
+        existAccountByAccountId(accountId)
             .flatMap { isExists ->
                 if(isExists) accountRepository.findById(accountId)
                 else Mono.error(UnknownAccountException("id가 ${accountId}인 계정을 찾을 수 없습니다!"))
             }
+
+    private fun existAccountByAccountId(accountId: Long) =
+        accountRepository.existsById(accountId)
 
     private fun Account.toProfileDto() =
         ProfileDto(
