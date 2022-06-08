@@ -13,6 +13,7 @@ data class ProfileResponse (
 
 data class CommonProfileResponse (
     val accountId: Long,
+    val permission: PermissionType,
     val name: String,
     val email: String,
     val profileImage: String

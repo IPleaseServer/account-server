@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 import site.iplease.accountserver.domain.profile.dto.ProfileDto
 import site.iplease.accountserver.global.common.type.AccountType
 import site.iplease.accountserver.global.common.type.DepartmentType
+import site.iplease.accountserver.global.common.type.PermissionType
 import site.iplease.accountserver.lib.*
 
 @Component
@@ -27,6 +28,7 @@ class ProfileGrpcConverterImpl: ProfileGrpcConverter {
             .setValue(
                 GCommonProfileData.newBuilder()
                     .setAccountId(dto.accountId)
+                    .setPermission(toGPermissionType(dto.permission))
                     .setName(dto.name)
                     .setEmail(dto.email)
                     .setProfileImage(dto.profileImage.toString())
@@ -58,8 +60,8 @@ class ProfileGrpcConverterImpl: ProfileGrpcConverter {
             .setNull(NullValue.NULL_VALUE)
             .build()
 
-    private fun toGDepartmentType(department: DepartmentType): GDepartmentType =
-        when(department) {
+    private fun toGDepartmentType(type: DepartmentType): GDepartmentType =
+        when(type) {
             DepartmentType.SMART_IOT -> GDepartmentType.SMART_IOT
             DepartmentType.SOFTWARE_DEVELOP -> GDepartmentType.SOFTWARE_DEVELOP
         }
@@ -68,5 +70,12 @@ class ProfileGrpcConverterImpl: ProfileGrpcConverter {
         when(type) {
             AccountType.STUDENT -> GAccountType.STUDENT
             AccountType.TEACHER -> GAccountType.TEACHER
+        }
+
+    private fun toGPermissionType(type: PermissionType): GPermissionType =
+        when(type) {
+            PermissionType.USER -> GPermissionType.USER
+            PermissionType.OPERATOR -> GPermissionType.OPERATOR
+            PermissionType.ADMINISTRATOR -> GPermissionType.ADMINISTRATOR
         }
 }

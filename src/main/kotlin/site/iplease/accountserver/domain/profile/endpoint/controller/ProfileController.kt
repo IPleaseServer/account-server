@@ -21,23 +21,24 @@ import site.iplease.accountserver.global.common.type.AccountType
 class ProfileController(
     private val profileService: ProfileService
 ) {
-    @GetMapping
-    fun getMyProfile(@RequestHeader authorization: String): Mono<ResponseEntity<ProfileResponse>> =
-        authorization.substring("Bearer ".length)//액세스 토큰을 추출한다.
-            .let { profileService.getProfileByAccessToken(it) }
-            .map { it.toResponse() }
-            .map { ResponseEntity.ok(it) }
-    @GetMapping("/{accountId}")
-    fun getProfileByAccountId(@PathVariable accountId: Long): Mono<ResponseEntity<ProfileResponse>> =
-        profileService.getProfileByAccountId(accountId)
-            .map { it.toResponse() }
-            .map { ResponseEntity.ok(it) }
+    @GetMapping("/access-token/{token}")
+    fun getMyProfile(@PathVariable token: String): Mono<ResponseEntity<ProfileResponse>> =
+        profileService.getProfileByAccessToken(token)
+            .map { profile -> profile.toResponse() }
+            .map { response -> ResponseEntity.ok(response) }
+
+    @GetMapping("/id/{id}")
+    fun getProfileByAccountId(@PathVariable id: Long): Mono<ResponseEntity<ProfileResponse>> =
+        profileService.getProfileByAccountId(id)
+            .map { profile -> profile.toResponse() }
+            .map { response -> ResponseEntity.ok(response) }
 
     private fun ProfileDto.toResponse() =
         ProfileResponse(
             type = type,
             common = CommonProfileResponse(
                 accountId = accountId,
+                permission = permission,
                 name = name,
                 email = email,
                 profileImage = profileImage.toString()

@@ -10,6 +10,7 @@ option java_outer_classname = "ProfileProto";
 service ProfileService {
   rpc getProfileByAccessToken(google.protobuf.StringValue) returns (GProfileResponse);
   rpc getProfileByAccountId(google.protobuf.Int64Value) returns (GProfileResponse);
+  rpc existProfileByAccountToken(google.protobuf.StringValue) returns (google.protobuf.BoolValue);
 }
 
 message GProfileResponse {
@@ -34,9 +35,10 @@ message GCommonProfileResponse {
 }
 message GCommonProfileData {
   int64 accountId = 1;
-  string name = 2;
-  string email = 3;
-  string profileImage = 4;
+  GPermissionType permission = 2;
+  string name = 3;
+  string email = 4;
+  string profileImage = 5;
 }
 
 message GStudentProfileResponse {
@@ -73,4 +75,10 @@ enum GErrorType {
   CLIENT_ERROR = 1;
   SERVER_ERROR = 2;
   UNKNOWN_ERROR = 3;
+}
+
+enum GPermissionType {
+    USER = 0;
+    OPERATOR = 1;
+    ADMINISTRATOR = 2;
 }

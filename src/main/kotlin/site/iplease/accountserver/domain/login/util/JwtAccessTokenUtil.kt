@@ -30,8 +30,7 @@ class JwtAccessTokenUtil(
         }
 
     override fun decode(token: String): Mono<Long> =
-        Jwts.parser()
-            .setSigningKey(jwtProperties.value.secret)
-            .parseClaimsJws(token).body.toMono()
+        Unit.toMono()
+            .map { Jwts.parser().setSigningKey(jwtProperties.value.secret).parseClaimsJws(token).body }
             .map { it.get("id", String::class.java).toLong() }
 }

@@ -1,5 +1,6 @@
 package site.iplease.accountserver.domain.profile.endpoint.grpc
 
+import com.google.protobuf.BoolValue
 import com.google.protobuf.Int64Value
 import com.google.protobuf.StringValue
 import io.jsonwebtoken.ExpiredJwtException
@@ -35,6 +36,11 @@ class ProfileGrpcService(
             .flatMap { profileService.getProfileByAccountId(it) }
             .map { profileGrpcConverter.toGrpcResponse(it) }
             .handleException()
+
+    override fun existProfileByAccountToken(request: Mono<StringValue>): Mono<BoolValue> =
+        request.map { it.value }
+            .flatMap { profileService.existProfileByAccessToken(it) }
+            .map { BoolValue.of(it) }
 
     private fun Mono<GProfileResponse>.handleException(): Mono<GProfileResponse> =
         onErrorReturn(MalformedJwtException::class.java, GErrorType.CLIENT_ERROR, "잘못된 형식의 Jwt토큰입니다!")
