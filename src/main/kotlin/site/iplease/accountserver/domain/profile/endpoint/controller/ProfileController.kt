@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.profile.dto.ProfileDto
-import site.iplease.accountserver.domain.profile.response.CommonProfileResponse
-import site.iplease.accountserver.domain.profile.response.ProfileResponse
-import site.iplease.accountserver.domain.profile.response.StudentProfileResponse
-import site.iplease.accountserver.domain.profile.response.TeacherProfileResponse
+import site.iplease.accountserver.domain.profile.response.*
 import site.iplease.accountserver.domain.profile.service.ProfileService
 import site.iplease.accountserver.global.common.type.AccountType
 
@@ -31,6 +28,12 @@ class ProfileController(
     fun getProfileByAccountId(@PathVariable id: Long): Mono<ResponseEntity<ProfileResponse>> =
         profileService.getProfileByAccountId(id)
             .map { profile -> profile.toResponse() }
+            .map { response -> ResponseEntity.ok(response) }
+
+    @GetMapping("/access-token/{token}/exists")
+    fun existsMyProfile(@PathVariable token: String): Mono<ResponseEntity<ProfileExistsResponse>> =
+        profileService.existProfileByAccessToken(token)
+            .map { bool ->  ProfileExistsResponse(bool) }
             .map { response -> ResponseEntity.ok(response) }
 
     private fun ProfileDto.toResponse() =
