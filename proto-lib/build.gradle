@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'site.iplease'
-version '1.0.2-rc2'
+version '1.0.2-rc3'
 
 repositories {
     mavenCentral()
