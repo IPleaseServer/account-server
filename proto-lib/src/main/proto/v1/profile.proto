@@ -10,6 +10,7 @@ option java_outer_classname = "ProfileProto";
 service ProfileService {
   rpc getProfileByAccessToken(google.protobuf.StringValue) returns (GProfileResponse);
   rpc getProfileByAccountId(google.protobuf.Int64Value) returns (GProfileResponse);
+  rpc existProfileByAccountToken(google.protobuf.StringValue) returns (GProfileResponse);
 }
 
 message GProfileResponse {
