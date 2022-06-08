@@ -12,7 +12,7 @@ import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegi
 import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegisterDto
 import site.iplease.accountserver.domain.register.data.request.StudentRegisterRequest
 import site.iplease.accountserver.domain.register.data.request.TeacherRegisterRequest
-import site.iplease.accountserver.global.register.data.type.DepartmentType
+import site.iplease.accountserver.global.common.type.DepartmentType
 import site.iplease.accountserver.domain.register.exception.WrongDepartmentOrStudentNumberException
 import site.iplease.accountserver.domain.register.exception.WrongEmailTokenException
 

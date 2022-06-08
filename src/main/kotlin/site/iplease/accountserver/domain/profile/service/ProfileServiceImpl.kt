@@ -3,10 +3,10 @@ package site.iplease.accountserver.domain.profile.service
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.profile.dto.ProfileDto
-import site.iplease.accountserver.domain.register.data.entity.Account
+import site.iplease.accountserver.global.common.entity.Account
 import site.iplease.accountserver.global.common.exception.UnknownAccountException
 import site.iplease.accountserver.global.login.util.atomic.AccessTokenDecoder
-import site.iplease.accountserver.global.register.repository.AccountRepository
+import site.iplease.accountserver.global.common.repository.AccountRepository
 import java.net.URI
 
 @Service

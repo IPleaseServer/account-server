@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.login.config.LoginProperties
-import site.iplease.accountserver.domain.register.data.entity.Account
+import site.iplease.accountserver.global.common.entity.Account
 import java.sql.Timestamp
 import java.time.LocalDateTime
 

@@ -1,7 +1,8 @@
 package site.iplease.accountserver.domain.profile.response
 
-import site.iplease.accountserver.global.register.data.type.DepartmentType
-import site.iplease.accountserver.global.register.data.type.AccountType
+import site.iplease.accountserver.global.common.type.DepartmentType
+import site.iplease.accountserver.global.common.type.AccountType
+import site.iplease.accountserver.global.common.type.PermissionType
 
 data class ProfileResponse (
     val type: AccountType,
