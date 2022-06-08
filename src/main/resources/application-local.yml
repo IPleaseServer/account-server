@@ -14,9 +14,6 @@ spring:
   cloud:
     config:
       uri: http://${CONFIG_HOSTNAME}:${CONFIG_PORT}
-  redis:
-    host: {REDIS_HOSTNAME}
-    port: {REDIS_PORT}
 management:
   endpoints:
     web:
