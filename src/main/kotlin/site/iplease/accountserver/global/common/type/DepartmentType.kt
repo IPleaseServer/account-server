@@ -1,4 +1,4 @@
-package site.iplease.accountserver.global.register.data.type
+package site.iplease.accountserver.global.common.type
 
 enum class DepartmentType(
     vararg clazz: Int

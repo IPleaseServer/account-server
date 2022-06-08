@@ -6,10 +6,10 @@ import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.register.data.dto.CommonRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegisterDto
-import site.iplease.accountserver.domain.register.data.entity.Account
-import site.iplease.accountserver.global.register.data.type.AccountType
-import site.iplease.accountserver.global.register.data.type.PermissionType
-import site.iplease.accountserver.global.register.repository.AccountRepository
+import site.iplease.accountserver.global.common.entity.Account
+import site.iplease.accountserver.global.common.type.AccountType
+import site.iplease.accountserver.global.common.type.PermissionType
+import site.iplease.accountserver.global.common.repository.AccountRepository
 
 @Service
 class RegisterServiceImpl(

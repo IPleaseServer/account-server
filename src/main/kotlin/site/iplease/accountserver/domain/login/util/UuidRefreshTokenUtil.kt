@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.login.data.entity.RefreshToken
 import site.iplease.accountserver.domain.login.repository.RefreshTokenRepository
-import site.iplease.accountserver.domain.register.data.entity.Account
+import site.iplease.accountserver.global.common.entity.Account
 import site.iplease.accountserver.global.common.exception.PolicyViolationException
 import site.iplease.accountserver.global.common.type.PolicyType
 import java.util.*
