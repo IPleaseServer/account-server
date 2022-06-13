@@ -8,6 +8,7 @@ import site.iplease.accountserver.domain.auth.data.type.AuthType
 import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 import site.iplease.accountserver.domain.auth.config.AuthProperties
 import site.iplease.accountserver.domain.auth.data.dto.AuthDto
+import site.iplease.accountserver.domain.auth.exception.WrongAuthCodeException
 import site.iplease.accountserver.domain.auth.repository.AuthCodeRepository
 import site.iplease.accountserver.domain.auth.util.atomic.AuthCodeGenerator
 import site.iplease.accountserver.domain.auth.util.atomic.AuthTokenEncoder
@@ -27,8 +28,13 @@ class AuthorizeServiceImpl(
 
     ///BusinessLogics and Endpoints
     override fun authorize(code: String): Mono<AuthTokenDto> =
-        authCodeRepository.select(code) //DataStore에서 인증코드에 매핑된 Type(인증대상 종류 := Class)과 Data(인증대상 정보 := Instance)를 가져온다.
-            .flatMap { deleteAuthData(it) }//DataStore에서 인증코드 매핑정보를 제거한다.
+        authCodeRepository.exist(code)
+            .flatMap { isExists ->
+                //인증코드가 존재하면 DataStore에서 인증코드에 매핑된 Type(인증대상 종류 := Class)과 Data(인증대상 정보 := Instance)를 가져온다.
+                if(isExists) authCodeRepository.select(code)
+                //인증코드가 존재하지 않으면 오류를 발생시킨다.
+                else Mono.error(WrongAuthCodeException("없는 인증코드입니다!", code))
+            }.flatMap { deleteAuthData(it) }//DataStore에서 인증코드 매핑정보를 제거한다.
             .flatMap { encodeAuthToken(AuthDto(it.type, it.data)) }//가져온 Type과 Data로 인증토큰을 생성하고, 반환한다.
 
     private fun encodeAuthToken(dto: AuthDto): Mono<AuthTokenDto> =
