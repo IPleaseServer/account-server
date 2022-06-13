@@ -17,7 +17,7 @@ class AuthorizeControllerAdvice {
     fun handle(e: ConstraintViolationException): Mono<ResponseEntity<ErrorResponse>> = ResponseEntity.ok(
         ErrorResponse(
             status = ErrorStatus.CONSTRAINT_VIOLATION_ERROR,
-            message = "DB 제약조건을 위반하였습니다.",
+            message = "요청정보가 정책을 위반하였습니다.",
             detail = e.localizedMessage
         )).toMono()
 
