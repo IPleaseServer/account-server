@@ -8,13 +8,13 @@ import site.iplease.accountserver.domain.profile.data.request.UpdateProfileReque
 import site.iplease.accountserver.domain.profile.data.response.ChangePasswordRequest
 import site.iplease.accountserver.domain.profile.data.response.ProfileResponse
 import site.iplease.accountserver.domain.profile.service.ProfileCommandService
-import site.iplease.accountserver.domain.profile.util.ProfileConverter
+import site.iplease.accountserver.domain.profile.util.ProfileCommandPolicyValidator
 
 @Validated
 @RestController
 @RequestMapping("/api/v1/account/profile/secure")
 class SecureProfileController(
-    private val profileConverter: ProfileConverter,
+    private val profileCommandPolicyValidator: ProfileCommandPolicyValidator,
     private val profileCommandService: ProfileCommandService
 ) {
     @PutMapping("/password")
@@ -24,8 +24,8 @@ class SecureProfileController(
 
     @PutMapping
     fun updateMyProfile(@RequestHeader("X-Authorization-Id") accountId: Long, request: UpdateProfileRequest): Mono<ResponseEntity<ProfileResponse>> =
-        profileConverter.toDto(request)
-            .flatMap { dto -> profileCommandService.updateProfile(dto) }
+        profileCommandPolicyValidator.validateUpdateProfile(accountId, request)
+            .flatMap { dto -> profileCommandService.updateProfile(dto, accountId) }
             .map { profile -> profile.toResponse() }
             .map { response -> ResponseEntity.ok(response) }
 }
