@@ -13,7 +13,7 @@ import site.iplease.accountserver.global.common.type.PermissionType
 interface ProfileConverter {
     fun toEntity(profile: ProfileDto): Mono<Account>
     fun toDto(account: Account): Mono<ProfileDto>
-    fun toDto(account: UpdateProfileRequest): Mono<ProfileDto>
+    fun toDto(request: UpdateProfileRequest, account: Account, email: String): Mono<ProfileDto>
     fun toEntity(
         account: AccountType,
         permission: PermissionType,

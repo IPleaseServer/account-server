@@ -56,7 +56,7 @@ class ProfileCommandPolicyValidatorImpl(
     private fun makeProfileDto(request: UpdateProfileRequest, account: Account) =
         account.toMono()
             .flatMap { //신규 이메일로 변경될 경우, 이메일토큰을 검증하여 새 이메일을 확인한다.
-                val email = if(request.newEmailToken != null) decodeEmailToken(request.newEmailToken) else account.email.toMono()
-                email.map { account to it }
-            }.flatMap { profileConverter.toDto(request) }//이메일, 기존 계정 정보, 프로필 변경 요청정보를 통해 변경될 프로필을 생성한다.
+                if(request.newEmailToken != null) decodeEmailToken(request.newEmailToken)
+                else account.email.toMono()
+            }.flatMap { email -> profileConverter.toDto(request, account, email) }//이메일, 기존 계정 정보, 프로필 변경 요청정보를 통해 변경될 프로필을 생성한다.
 }
