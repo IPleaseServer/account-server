@@ -7,16 +7,16 @@ import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
 import site.iplease.accountserver.domain.profile.data.request.UpdateProfileRequest
 import site.iplease.accountserver.global.auth.data.dto.AuthTokenDto
 import site.iplease.accountserver.global.auth.data.type.AuthType
+import site.iplease.accountserver.global.auth.exception.WrongEmailTokenException
 import site.iplease.accountserver.global.auth.util.atomic.AuthTokenDecoder
 import site.iplease.accountserver.global.common.entity.Account
 import site.iplease.accountserver.global.common.repository.AccountRepository
-import site.iplease.accountserver.global.auth.exception.WrongEmailTokenException
-import java.net.URI
 
 @Component
 class ProfileCommandPolicyValidatorImpl(
     private val authTokenDecoder: AuthTokenDecoder,
     private val accountRepository: AccountRepository,
+    private val profileConverter: ProfileConverter
 ): ProfileCommandPolicyValidator {
     override fun validateChangePassword(accountId: Long, emailToken: String, newPassword: String): Mono<Account> =
         authTokenDecoder.decode(AuthTokenDto(token = emailToken))
@@ -58,14 +58,5 @@ class ProfileCommandPolicyValidatorImpl(
             .flatMap { //신규 이메일로 변경될 경우, 이메일토큰을 검증하여 새 이메일을 확인한다.
                 val email = if(request.newEmailToken != null) decodeEmailToken(request.newEmailToken) else account.email.toMono()
                 email.map { account to it }
-            }.map { ProfileDto( //이메일, 기존 계정 정보, 프로필 변경 요청정보를 통해 변경될 프로필을 생성한다.
-                type = request.type,
-                permission = request.permission,
-                accountId = account.id,
-                name = request.name ?: it.first.name,
-                email = it.second,
-                profileImage = request.profileImage ?: URI.create("https://iplease.site/images/profile.png"), //TODO account 엔티티에 profile image 스팩 추가
-                studentNumber = request.studentNumber ?: it.first.studentNumber,
-                department = request.department ?: it.first.department,
-            ) }
+            }.flatMap { profileConverter.toDto(request) }//이메일, 기존 계정 정보, 프로필 변경 요청정보를 통해 변경될 프로필을 생성한다.
 }
