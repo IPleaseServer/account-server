@@ -35,21 +35,21 @@ class ProfileController(
         profileService.existProfileByAccessToken(token)
             .map { bool ->  ProfileExistsResponse(bool) }
             .map { response -> ResponseEntity.ok(response) }
-
-    private fun ProfileDto.toResponse() =
-        ProfileResponse(
-            type = type,
-            common = CommonProfileResponse(
-                accountId = accountId,
-                permission = permission,
-                name = name,
-                email = email,
-                profileImage = profileImage.toString()
-            ),
-            teacher = if(type == AccountType.TEACHER) TeacherProfileResponse() else null,
-            student = if(type == AccountType.STUDENT) StudentProfileResponse(
-                studentNumber = studentNumber,
-                department = department
-            ) else null
-        )
 }
+
+fun ProfileDto.toResponse() =
+    ProfileResponse(
+        type = type,
+        common = CommonProfileResponse(
+            accountId = accountId,
+            permission = permission,
+            name = name,
+            email = email,
+            profileImage = profileImage.toString()
+        ),
+        teacher = if(type == AccountType.TEACHER) TeacherProfileResponse() else null,
+        student = if(type == AccountType.STUDENT) StudentProfileResponse(
+            studentNumber = studentNumber,
+            department = department
+        ) else null
+    )
