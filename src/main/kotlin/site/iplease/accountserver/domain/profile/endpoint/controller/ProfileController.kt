@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
-import site.iplease.accountserver.domain.profile.dto.ProfileDto
-import site.iplease.accountserver.domain.profile.response.*
+import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
+import site.iplease.accountserver.domain.profile.data.response.*
 import site.iplease.accountserver.domain.profile.service.ProfileService
 import site.iplease.accountserver.global.common.type.AccountType
 

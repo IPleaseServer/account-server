@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.auth.data.dto.AuthDto
-import site.iplease.accountserver.domain.auth.data.dto.AuthTokenDto
-import site.iplease.accountserver.domain.auth.data.type.AuthType
+import site.iplease.accountserver.global.auth.data.dto.AuthTokenDto
+import site.iplease.accountserver.global.auth.data.type.AuthType
 import site.iplease.accountserver.global.auth.util.atomic.AuthTokenDecoder
 import site.iplease.accountserver.domain.register.data.dto.CommonRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegisterDto
@@ -14,7 +14,7 @@ import site.iplease.accountserver.domain.register.data.request.StudentRegisterRe
 import site.iplease.accountserver.domain.register.data.request.TeacherRegisterRequest
 import site.iplease.accountserver.global.common.type.DepartmentType
 import site.iplease.accountserver.domain.register.exception.WrongDepartmentOrStudentNumberException
-import site.iplease.accountserver.domain.register.exception.WrongEmailTokenException
+import site.iplease.accountserver.global.auth.exception.WrongEmailTokenException
 
 @Component
 class RegisterPreprocessorImpl(

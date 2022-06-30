@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.register.controller.RegisterController
 import site.iplease.accountserver.domain.register.exception.WrongDepartmentOrStudentNumberException
-import site.iplease.accountserver.domain.register.exception.WrongEmailTokenException
+import site.iplease.accountserver.global.auth.exception.WrongEmailTokenException
 import site.iplease.accountserver.global.error.ErrorResponse
 import site.iplease.accountserver.global.error.ErrorStatus
 
