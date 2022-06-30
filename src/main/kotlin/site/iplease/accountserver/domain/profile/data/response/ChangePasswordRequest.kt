@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.profile.response
+package site.iplease.accountserver.domain.profile.data.response
 
 data class ChangePasswordRequest (
     val newPassword: String,

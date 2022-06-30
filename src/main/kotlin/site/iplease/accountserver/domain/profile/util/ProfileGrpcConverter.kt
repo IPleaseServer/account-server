@@ -1,6 +1,6 @@
 package site.iplease.accountserver.domain.profile.util
 
-import site.iplease.accountserver.domain.profile.dto.ProfileDto
+import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
 import site.iplease.accountserver.lib.*
 
 interface ProfileGrpcConverter {

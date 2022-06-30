@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
-import site.iplease.accountserver.domain.profile.response.ChangePasswordRequest
+import site.iplease.accountserver.domain.profile.data.response.ChangePasswordRequest
 import site.iplease.accountserver.domain.profile.service.ProfileCommandService
 
 @Validated
