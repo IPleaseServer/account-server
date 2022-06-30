@@ -1,7 +1,7 @@
 package site.iplease.accountserver.domain.auth.service
 
 import reactor.core.publisher.Mono
-import site.iplease.accountserver.domain.auth.data.dto.AuthTokenDto
+import site.iplease.accountserver.global.auth.data.dto.AuthTokenDto
 
 interface AuthorizeService {
     //DataStore에서 인증코드에 매핑된 Type(인증대상 종류 := Class)과 Data(인증대상 정보 := Instance)를 가져온다.

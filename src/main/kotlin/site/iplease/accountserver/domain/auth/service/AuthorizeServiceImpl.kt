@@ -3,8 +3,8 @@ package site.iplease.accountserver.domain.auth.service
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
-import site.iplease.accountserver.domain.auth.data.dto.AuthTokenDto
-import site.iplease.accountserver.domain.auth.data.type.AuthType
+import site.iplease.accountserver.global.auth.data.dto.AuthTokenDto
+import site.iplease.accountserver.global.auth.data.type.AuthType
 import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 import site.iplease.accountserver.domain.auth.config.AuthProperties
 import site.iplease.accountserver.domain.auth.data.dto.AuthDto
