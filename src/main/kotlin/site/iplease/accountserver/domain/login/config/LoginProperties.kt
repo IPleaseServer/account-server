@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "login")
+@ConfigurationProperties(prefix = "iplease.login")
 data class LoginProperties (
     val refreshProperties: RefreshTokenProperties,
     val accessProperties: AccessTokenProperties,
