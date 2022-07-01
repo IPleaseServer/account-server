@@ -6,6 +6,6 @@ import site.iplease.accountserver.domain.profile.data.request.UpdateProfileReque
 import site.iplease.accountserver.global.common.entity.Account
 
 interface ProfileCommandPolicyValidator {
-    fun validateChangePassword(accountId: Long, emailToken: String, newPassword: String): Mono<Account>
+    fun validateChangePassword(accountId: Long, emailToken: String): Mono<Account>
     fun validateUpdateProfile(accountId: Long, request: UpdateProfileRequest): Mono<ProfileDto>
 }

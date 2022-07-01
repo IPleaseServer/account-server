@@ -19,7 +19,8 @@ class SecureProfileController(
 ) {
     @PutMapping("/password")
     fun changePassword(@RequestHeader("X-Authorization-Id") accountId: Long, @RequestBody request: ChangePasswordRequest): Mono<ResponseEntity<Unit>> =
-        profileCommandService.changePassword(accountId, request.emailToken, request.newPassword)
+        profileCommandPolicyValidator.validateChangePassword(accountId, request.emailToken)
+            .flatMap { profileCommandService.changePassword(accountId, request.newPassword) }
             .map { ResponseEntity.ok(it) }
 
     @PutMapping

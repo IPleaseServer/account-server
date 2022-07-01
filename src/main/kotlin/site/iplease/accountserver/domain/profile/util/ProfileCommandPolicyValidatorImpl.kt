@@ -18,7 +18,7 @@ class ProfileCommandPolicyValidatorImpl(
     private val accountRepository: AccountRepository,
     private val profileConverter: ProfileConverter
 ): ProfileCommandPolicyValidator {
-    override fun validateChangePassword(accountId: Long, emailToken: String, newPassword: String): Mono<Account> =
+    override fun validateChangePassword(accountId: Long, emailToken: String): Mono<Account> =
         authTokenDecoder.decode(AuthTokenDto(token = emailToken))
             .flatMap { dto ->
                 if (dto.type == AuthType.EMAIL) dto.data.toMono()
