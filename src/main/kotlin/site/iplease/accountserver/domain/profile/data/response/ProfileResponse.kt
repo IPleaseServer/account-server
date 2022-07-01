@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.profile.response
+package site.iplease.accountserver.domain.profile.data.response
 
 import site.iplease.accountserver.global.common.type.DepartmentType
 import site.iplease.accountserver.global.common.type.AccountType

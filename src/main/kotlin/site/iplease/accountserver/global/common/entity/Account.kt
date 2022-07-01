@@ -15,5 +15,6 @@ data class Account(
     val email: String,
     val encodedPassword: String,
     val studentNumber: Int = 1101,
-    val department: DepartmentType = DepartmentType.SOFTWARE_DEVELOP
+    val department: DepartmentType = DepartmentType.SOFTWARE_DEVELOP,
+    val profileImageUrl: String
 )

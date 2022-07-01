@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.register.exception
+package site.iplease.accountserver.global.auth.exception
 
 import site.iplease.accountserver.global.error.IpleaseError
 

@@ -2,7 +2,7 @@ package site.iplease.accountserver.domain.profile.util
 
 import com.google.protobuf.NullValue
 import org.springframework.stereotype.Component
-import site.iplease.accountserver.domain.profile.dto.ProfileDto
+import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
 import site.iplease.accountserver.global.common.type.AccountType
 import site.iplease.accountserver.global.common.type.DepartmentType
 import site.iplease.accountserver.global.common.type.PermissionType

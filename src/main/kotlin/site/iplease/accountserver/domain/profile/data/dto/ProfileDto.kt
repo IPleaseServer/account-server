@@ -1,4 +1,4 @@
-package site.iplease.accountserver.domain.profile.dto
+package site.iplease.accountserver.domain.profile.data.dto
 
 import site.iplease.accountserver.global.common.type.AccountType
 import site.iplease.accountserver.global.common.type.DepartmentType
