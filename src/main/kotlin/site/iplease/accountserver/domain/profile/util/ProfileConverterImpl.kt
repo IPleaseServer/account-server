@@ -6,6 +6,10 @@ import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.profile.config.ProfileImageProperties
 import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
 import site.iplease.accountserver.domain.profile.data.request.UpdateProfileRequest
+import site.iplease.accountserver.domain.profile.data.response.CommonProfileResponse
+import site.iplease.accountserver.domain.profile.data.response.ProfileResponse
+import site.iplease.accountserver.domain.profile.data.response.StudentProfileResponse
+import site.iplease.accountserver.domain.profile.data.response.TeacherProfileResponse
 import site.iplease.accountserver.domain.register.data.dto.CommonRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegisterDto
 import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegisterDto
@@ -81,4 +85,23 @@ class ProfileConverterImpl(
             studentNumber = request.studentNumber ?: account.studentNumber,
             department = request.department ?: account.department,
         ) }
+
+    override fun toResponse(dto: ProfileDto): Mono<ProfileResponse> =
+        Unit.toMono().map {
+            ProfileResponse(
+                type = dto.type,
+                common = CommonProfileResponse(
+                    accountId = dto.accountId,
+                    permission = dto.permission,
+                    name = dto.name,
+                    email = dto.email,
+                    profileImage = dto.profileImage.toString()
+                ),
+                teacher = if (dto.type == AccountType.TEACHER) TeacherProfileResponse() else null,
+                student = if (dto.type == AccountType.STUDENT) StudentProfileResponse(
+                    studentNumber = dto.studentNumber,
+                    department = dto.department
+                ) else null
+            )
+        }
 }
