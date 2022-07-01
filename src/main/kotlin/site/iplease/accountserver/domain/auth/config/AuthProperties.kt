@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "auth")
+@ConfigurationProperties(prefix = "iplease.auth")
 data class AuthProperties (
     val redisKeyPrefix: String,
     val expireSeconds: Long,
