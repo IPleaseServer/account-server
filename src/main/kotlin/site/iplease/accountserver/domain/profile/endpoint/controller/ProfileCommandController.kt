@@ -13,8 +13,8 @@ import site.iplease.accountserver.domain.profile.util.ProfileConverter
 
 @Validated
 @RestController
-@RequestMapping("/api/v1/account/profile/secure")
-class SecureProfileController(
+@RequestMapping("/api/v1/account/profile/command")
+class ProfileCommandController(
     private val profileCommandPolicyValidator: ProfileCommandPolicyValidator,
     private val profileCommandService: ProfileCommandService,
     private val profileConverter: ProfileConverter

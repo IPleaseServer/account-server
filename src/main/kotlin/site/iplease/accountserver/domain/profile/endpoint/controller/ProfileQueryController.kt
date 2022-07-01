@@ -14,8 +14,8 @@ import site.iplease.accountserver.domain.profile.util.ProfileConverter
 
 @Validated
 @RestController
-@RequestMapping("/api/v1/account/profile")
-class ProfileController(
+@RequestMapping("/api/v1/account/profile/query")
+class ProfileQueryController(
     private val profileService: ProfileService,
     private val profileConverter: ProfileConverter
 ) {
