@@ -6,7 +6,7 @@ import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
 import site.iplease.accountserver.domain.profile.data.request.UpdateProfileRequest
 import site.iplease.accountserver.domain.profile.data.response.ChangePasswordRequest
 import site.iplease.accountserver.global.auth.data.dto.AuthTokenDto
-import site.iplease.accountserver.global.auth.util.EmailTokenValidator
+import site.iplease.accountserver.global.auth.util.atomic.EmailTokenValidator
 import site.iplease.accountserver.global.auth.util.atomic.AuthTokenDecoder
 import site.iplease.accountserver.global.common.util.AccountOwnerValidator
 
