@@ -8,9 +8,9 @@ import site.iplease.accountserver.global.common.exception.PolicyViolationExcepti
 import site.iplease.accountserver.global.common.repository.AccountRepository
 
 @Component
-class RegisterStudentNumberCheckerImpl(
+class RegisterStudentNumberValidatorImpl(
     private val accountRepository: AccountRepository
-): RegisterStudentNumberChecker {
+): RegisterStudentNumberValidator {
     override fun valid(studentNumber: Int): Mono<Unit> =
         accountRepository.existsByStudentNumber(studentNumber)
             .flatMap {
