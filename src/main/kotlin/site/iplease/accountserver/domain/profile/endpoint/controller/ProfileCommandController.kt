@@ -21,13 +21,13 @@ class ProfileCommandController(
 ) {
     @PutMapping("/password")
     fun changePassword(@RequestHeader("X-Authorization-Id") accountId: Long, @RequestBody request: ChangePasswordRequest): Mono<ResponseEntity<Unit>> =
-        profileCommandPreprocessor.validateChangePassword(accountId, request.emailToken)
+        profileCommandPreprocessor.validate(accountId, request)
             .flatMap { profileCommandService.changePassword(accountId, request.newPassword) }
             .map { ResponseEntity.ok(it) }
 
     @PutMapping
     fun updateMyProfile(@RequestHeader("X-Authorization-Id") accountId: Long, request: UpdateProfileRequest): Mono<ResponseEntity<ProfileResponse>> =
-        profileCommandPreprocessor.validateUpdateProfile(accountId, request)
+        profileCommandPreprocessor.validate(accountId, request)
             .flatMap { dto -> profileCommandService.updateProfile(dto, accountId) }
             .flatMap { profile -> profileConverter.toResponse(profile) }
             .map { response -> ResponseEntity.ok(response) }
