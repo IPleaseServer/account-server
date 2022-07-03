@@ -28,6 +28,7 @@ class ProfileCommandController(
     @PutMapping
     fun updateMyProfile(@RequestHeader("X-Authorization-Id") accountId: Long, request: UpdateProfileRequest): Mono<ResponseEntity<ProfileResponse>> =
         profileCommandPreprocessor.validate(accountId, request)
+            .flatMap { profileCommandPreprocessor.convert(accountId, request) }
             .flatMap { dto -> profileCommandService.updateProfile(dto, accountId) }
             .flatMap { profile -> profileConverter.toResponse(profile) }
             .map { response -> ResponseEntity.ok(response) }
