@@ -18,11 +18,11 @@ import java.net.URI
 import javax.imageio.ImageIO
 
 @Component
-class ProfileCommandPolicyValidatorImpl(
+class ProfileCommandPreprocessorImpl(
     private val authTokenDecoder: AuthTokenDecoder,
     private val accountRepository: AccountRepository,
     private val profileConverter: ProfileConverter
-): ProfileCommandPolicyValidator {
+): ProfileCommandPreprocessor {
     //비밀번호 정책을 검사사한다.
     override fun validateChangePassword(accountId: Long, emailToken: String): Mono<Account> =
         authTokenDecoder.decode(AuthTokenDto(token = emailToken))
