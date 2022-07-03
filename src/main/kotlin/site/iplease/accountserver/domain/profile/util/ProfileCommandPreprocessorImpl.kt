@@ -3,6 +3,7 @@ package site.iplease.accountserver.domain.profile.util
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
+import site.iplease.accountserver.domain.auth.data.dto.AuthDto
 import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
 import site.iplease.accountserver.domain.profile.data.request.UpdateProfileRequest
 import site.iplease.accountserver.domain.profile.data.response.ChangePasswordRequest
@@ -26,26 +27,42 @@ class ProfileCommandPreprocessorImpl(
 ): ProfileCommandPreprocessor {
     //비밀번호 정책을 검사사한다.
     override fun validate(accountId: Long, request: ChangePasswordRequest): Mono<Account> =
+        //이메일 토큰을 decode한다.
         authTokenDecoder.decode(AuthTokenDto(token = request.emailToken))
-            .flatMap { dto ->
-                if (dto.type == AuthType.EMAIL) dto.data.toMono()
-                else Mono.error(WrongEmailTokenException("해당 토큰은 ${dto.type}토큰입니다!"))
-            }.flatMap { email -> accountRepository.findByEmail(email) }
+            //decode해서 얻은 인증토큰을 validate한다. (인증토큰이 유효한 이메일 토큰인가)
+            .flatMap { dto -> validateAuthToken(dto).map { dto.data } }//TODO emailTokenValidator.validate(authDto)
+            //decode해서 얻은 email을 validate한다. (요청자가 해당email의 소유자인가)
+            .flatMap { email -> validateAccountOwner(accountId, email) }//TODO accountOwnerValidator.validate(accountId, email);
+
+    //프로필 업데이트 정책을 검사한다.
+    override fun validate(accountId: Long, request: UpdateProfileRequest): Mono<ProfileDto> =
+        //이메일 토큰을 decode한다.
+        authTokenDecoder.decode(AuthTokenDto(token = request.emailToken))
+            //decode해서 얻은 인증토큰을 validate한다. (인증토큰이 유효한 이메일 토큰인가)
+            .flatMap { dto -> validateAuthToken(dto).map { dto.data } }//TODO emailTokenValidator.validate(authDto)
+            //decode해서 얻은 email을 validate한다. (요청자가 해당email의 소유자인가)
+            .flatMap { email -> validateAccountOwner(accountId, email) }//TODO accountOwnerValidator.validate(accountId, email);
+            //요청정보와 요청자 id를 프로필Dto로 convert한다.
+            .flatMap { convertChangedProfile(accountId, request) }
+            //convert해서 얻은 프로필Dto를 validate한다. (프로필 정보가 유효한가)
+            .flatMap { profileDto -> validateProfilePolicy(profileDto) } //TODO profilePolicyValidator.validate(profileDto)
+
+    private fun convertChangedProfile(accountId: Long, request: UpdateProfileRequest) =/////
+        accountRepository.findById(accountId) //인자로 받은 accountId를 통해 프로필을 변경할 계정을 찾는다.
+            .flatMap { account -> makeProfileDto(request, account) } //계정과 인자로 받은 프로필 변경 요청 정보를 통해 변경될 프로필을 생성한다.
+
+    fun validateAuthToken(dto: AuthDto) =/////
+        if (dto.type == AuthType.EMAIL) Unit.toMono()
+        else Mono.error(WrongEmailTokenException("해당 토큰은 ${dto.type}토큰입니다!"))
+
+    fun validateAccountOwner(accountId: Long, email: String) =/////
+        accountRepository.findByEmail(email)
             .flatMap { account ->
                 if (account.id == accountId) account.toMono()
                 else Mono.error(WrongEmailTokenException("해당 토큰은 다른 사용자의 인증토큰입니다! - ${account.id}"))
             }
 
-    //프로필 업데이트 정책을 검사한다.
-    override fun validate(accountId: Long, request: UpdateProfileRequest): Mono<ProfileDto> =
-        //프로필 수정 권한을 확인하기위해 이메일 토큰을 검증한다.
-        //이메일 토큰이 존재하며, 인자로 받은 accountId와 동일한 계정에 대한 토큰인지 검증한다.
-        validateUserToEmailToken(request.emailToken, accountId)
-            .flatMap { accountRepository.findById(accountId) } //인자로 받은 accountId를 통해 프로필을 변경할 계정을 찾는다.
-            .flatMap { account -> makeProfileDto(request, account) } //계정과 인자로 받은 프로필 변경 요청 정보를 통해 변경될 프로필을 생성한다.
-            .flatMap { profileDto -> validateProfilePolicy(profileDto) }
-
-    private fun validateProfilePolicy(dto: ProfileDto): Mono<ProfileDto> =
+    private fun validateProfilePolicy(dto: ProfileDto): Mono<ProfileDto> =/////
         dto.toMono()
             .flatMap { validateNamePolicy(dto.name) }
             .flatMap { validateProfileImagePolicy(dto.profileImage) }
@@ -53,6 +70,7 @@ class ProfileCommandPreprocessorImpl(
             .flatMap { validateDepartment(dto.department, dto.studentNumber) }
             .map { dto }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     private fun validateDepartment(department: DepartmentType, studentNumber: Int): Mono<Unit> =
         getClassByStudentNumber(studentNumber).toMono()
             .map { clazz -> department.classes.contains(clazz) }
@@ -85,15 +103,6 @@ class ProfileCommandPreprocessorImpl(
             .flatMap { isMatch ->
                 if (isMatch) Unit.toMono()
                 else Mono.error(PolicyViolationException(PolicyType.NAME, "이름이 올바르지 않습니다!"))
-            }
-
-    //이메일 토큰으로 사용자의 인증인가 정보를 검증한다.
-    private fun validateUserToEmailToken(emailToken: String, accountId: Long) =
-        decodeEmailToken(emailToken)
-            .flatMap { email -> accountRepository.findByEmail(email) }
-            .flatMap { account ->
-                if (account.id == accountId) account.toMono()
-                else Mono.error(WrongEmailTokenException("해당 토큰은 다른 사용자의 인증토큰입니다! - ${account.id}"))
             }
 
     //이메일 토큰을 해석한다.
