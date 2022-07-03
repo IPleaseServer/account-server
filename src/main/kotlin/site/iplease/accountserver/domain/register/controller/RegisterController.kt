@@ -24,14 +24,14 @@ class RegisterController(
     @PostMapping("/student")
     fun registerStudent(@RequestBody @Valid request: StudentRegisterRequest): Mono<ResponseEntity<RegisterResponse>> =
         registerPreprocessor.valid(request)
-            .flatMap { registerPreprocessor.decode(request) }
+            .flatMap { registerPreprocessor.decodeAndConvert(request) }
             .flatMap { registerService.registerStudent(it.first, it.second) }
             .map { RegisterResponse(it) }
             .map { ResponseEntity.ok(it) }
     @PostMapping("/teacher")
     fun registerTeacher(@RequestBody @Valid request: TeacherRegisterRequest): Mono<ResponseEntity<RegisterResponse>> =
         registerPreprocessor.valid(request)
-            .flatMap { registerPreprocessor.decode(request) }
+            .flatMap { registerPreprocessor.decodeAndConvert(request) }
             .flatMap { registerService.registerTeacher(it.first, it.second) }
             .map { RegisterResponse(it) }
             .map { ResponseEntity.ok(it) }

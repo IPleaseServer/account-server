@@ -6,9 +6,9 @@ import site.iplease.accountserver.global.auth.data.dto.AuthTokenDto
 import site.iplease.accountserver.global.auth.util.atomic.AuthTokenDecoder
 
 @Component
-class JwtTeacherCodeChecker(
+class TeacherCodeValidatorImpl(
     private val authTokenDecoder: AuthTokenDecoder
-): TeacherCodeChecker {
+): TeacherCodeValidator {
     override fun valid(teacherCode: String): Mono<Unit> =
         authTokenDecoder.decode(AuthTokenDto(token = teacherCode))
             .map {  }

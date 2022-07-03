@@ -1,8 +1,6 @@
 package site.iplease.accountserver.domain.auth.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
@@ -14,10 +12,9 @@ import site.iplease.accountserver.domain.auth.data.entity.AuthCode
 
 @Configuration
 class AuthCodeRedisConfiguration {
-    @Bean //TODO ObjectMapper 빈으로 등록하여 로직 분리
-    fun authCodeReactiveRedisTemplate(connectionFactory: ReactiveRedisConnectionFactory): ReactiveRedisTemplate<String, AuthCode> =
-        ObjectMapper().registerKotlinModule().registerModule(JavaTimeModule())
-            .let {  Jackson2JsonRedisSerializer(AuthCode::class.java).apply { setObjectMapper(it) } }
+    @Bean
+    fun authCodeReactiveRedisTemplate(connectionFactory: ReactiveRedisConnectionFactory, objectMapper: ObjectMapper): ReactiveRedisTemplate<String, AuthCode> =
+        Jackson2JsonRedisSerializer(AuthCode::class.java).apply { setObjectMapper(objectMapper) }
             .let { (StringRedisSerializer() to it) }
             .let {
                 RedisSerializationContext
