@@ -5,6 +5,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
 import site.iplease.accountserver.domain.profile.data.request.UpdateProfileRequest
+import site.iplease.accountserver.domain.profile.data.response.ChangePasswordRequest
 import site.iplease.accountserver.global.auth.data.dto.AuthTokenDto
 import site.iplease.accountserver.global.auth.data.type.AuthType
 import site.iplease.accountserver.global.auth.exception.WrongEmailTokenException
@@ -24,8 +25,8 @@ class ProfileCommandPreprocessorImpl(
     private val profileConverter: ProfileConverter
 ): ProfileCommandPreprocessor {
     //비밀번호 정책을 검사사한다.
-    override fun validateChangePassword(accountId: Long, emailToken: String): Mono<Account> =
-        authTokenDecoder.decode(AuthTokenDto(token = emailToken))
+    override fun validate(accountId: Long, request: ChangePasswordRequest): Mono<Account> =
+        authTokenDecoder.decode(AuthTokenDto(token = request.emailToken))
             .flatMap { dto ->
                 if (dto.type == AuthType.EMAIL) dto.data.toMono()
                 else Mono.error(WrongEmailTokenException("해당 토큰은 ${dto.type}토큰입니다!"))
@@ -36,7 +37,7 @@ class ProfileCommandPreprocessorImpl(
             }
 
     //프로필 업데이트 정책을 검사한다.
-    override fun validateUpdateProfile(accountId: Long, request: UpdateProfileRequest): Mono<ProfileDto> =
+    override fun validate(accountId: Long, request: UpdateProfileRequest): Mono<ProfileDto> =
         //프로필 수정 권한을 확인하기위해 이메일 토큰을 검증한다.
         //이메일 토큰이 존재하며, 인자로 받은 accountId와 동일한 계정에 대한 토큰인지 검증한다.
         validateUserToEmailToken(request.emailToken, accountId)
