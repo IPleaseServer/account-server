@@ -7,4 +7,5 @@ interface ProfileService {
     fun getProfileByAccessToken(accessToken: String): Mono<ProfileDto>
     fun getProfileByAccountId(accountId: Long): Mono<ProfileDto>
     fun existProfileByAccessToken(accessToken: String): Mono<Boolean>
+    fun existsProfileByEmail(email: String): Mono<Boolean>
 }

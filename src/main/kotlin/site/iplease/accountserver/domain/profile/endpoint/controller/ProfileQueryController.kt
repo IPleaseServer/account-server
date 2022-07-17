@@ -36,4 +36,11 @@ class ProfileQueryController(
         profileService.existProfileByAccessToken(token)
             .map { bool ->  ProfileExistsResponse(bool) }
             .map { response -> ResponseEntity.ok(response) }
+
+    //이메일을 통해 계정 존재 여부를 확인한다.
+    @GetMapping("/email/{email}/exists")
+    fun existsAccountByEmail(@PathVariable email: String): Mono<ResponseEntity<ProfileExistsResponse>> =
+        profileService.existsProfileByEmail(email) //계정 존재 여부를 검사한다.
+            .map { bool ->  ProfileExistsResponse(bool) } //반환된 검사결과를 Response로 변환한다.
+            .map { response -> ResponseEntity.ok(response) } //Response를 ResponseEntity로 변환하여 반환한다.
 }
