@@ -10,6 +10,6 @@ import site.iplease.accountserver.domain.register.data.request.TeacherRegisterRe
 interface RegisterPreprocessor {
     fun valid(request: StudentRegisterRequest): Mono<Unit>//요청정보를 검사한다.
     fun valid(request: TeacherRegisterRequest): Mono<Unit>//요청정보를 검사한다.
-    fun decode(request: StudentRegisterRequest): Mono<Pair<CommonRegisterDto, StudentAdditionalRegisterDto>>//요청정보를 해독한다.
-    fun decode(request: TeacherRegisterRequest): Mono<Pair<CommonRegisterDto, TeacherAdditionalRegisterDto>>//요청정보를 해독한다.
+    fun decodeAndConvert(request: StudentRegisterRequest): Mono<Pair<CommonRegisterDto, StudentAdditionalRegisterDto>>//요청정보를 해독한다.
+    fun decodeAndConvert(request: TeacherRegisterRequest): Mono<Pair<CommonRegisterDto, TeacherAdditionalRegisterDto>>//요청정보를 해독한다.
 }

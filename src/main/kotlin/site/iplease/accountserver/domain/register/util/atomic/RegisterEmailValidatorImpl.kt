@@ -8,9 +8,9 @@ import site.iplease.accountserver.global.common.exception.PolicyViolationExcepti
 import site.iplease.accountserver.global.common.repository.AccountRepository
 
 @Component
-class RegisterEmailCheckerImpl(
+class RegisterEmailValidatorImpl(
     private val accountRepository: AccountRepository
-): RegisterEmailChecker {
+): RegisterEmailValidator {
     override fun valid(email: String): Mono<Unit> =
         isAlreadyRegistered(email)
             .flatMap { isNotSchoolEmail(email) }

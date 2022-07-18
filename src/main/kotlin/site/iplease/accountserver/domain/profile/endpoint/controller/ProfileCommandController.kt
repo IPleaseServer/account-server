@@ -8,26 +8,27 @@ import site.iplease.accountserver.domain.profile.data.request.UpdateProfileReque
 import site.iplease.accountserver.domain.profile.data.response.ChangePasswordRequest
 import site.iplease.accountserver.domain.profile.data.response.ProfileResponse
 import site.iplease.accountserver.domain.profile.service.ProfileCommandService
-import site.iplease.accountserver.domain.profile.util.ProfileCommandPolicyValidator
+import site.iplease.accountserver.domain.profile.util.ProfileCommandPreprocessor
 import site.iplease.accountserver.domain.profile.util.ProfileConverter
 
 @Validated
 @RestController
 @RequestMapping("/api/v1/account/profile/command")
 class ProfileCommandController(
-    private val profileCommandPolicyValidator: ProfileCommandPolicyValidator,
+    private val profileCommandPreprocessor: ProfileCommandPreprocessor,
     private val profileCommandService: ProfileCommandService,
     private val profileConverter: ProfileConverter
 ) {
     @PutMapping("/password")
     fun changePassword(@RequestHeader("X-Authorization-Id") accountId: Long, @RequestBody request: ChangePasswordRequest): Mono<ResponseEntity<Unit>> =
-        profileCommandPolicyValidator.validateChangePassword(accountId, request.emailToken)
+        profileCommandPreprocessor.validate(accountId, request)
             .flatMap { profileCommandService.changePassword(accountId, request.newPassword) }
             .map { ResponseEntity.ok(it) }
 
     @PutMapping
     fun updateMyProfile(@RequestHeader("X-Authorization-Id") accountId: Long, request: UpdateProfileRequest): Mono<ResponseEntity<ProfileResponse>> =
-        profileCommandPolicyValidator.validateUpdateProfile(accountId, request)
+        profileCommandPreprocessor.validate(accountId, request)
+            .flatMap { profileCommandPreprocessor.convert(accountId, request) }
             .flatMap { dto -> profileCommandService.updateProfile(dto, accountId) }
             .flatMap { profile -> profileConverter.toResponse(profile) }
             .map { response -> ResponseEntity.ok(response) }

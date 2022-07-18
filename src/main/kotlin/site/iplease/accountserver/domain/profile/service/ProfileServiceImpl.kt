@@ -28,6 +28,10 @@ class ProfileServiceImpl(
             .flatMap { existAccountByAccountId(it) }
             .onErrorReturn(false)
 
+    override fun existsProfileByEmail(email: String): Mono<Boolean> =
+        existAccountByEmail(email)
+            .onErrorReturn(false)
+
     private fun getAccountByAccountId(accountId: Long) =
         existAccountByAccountId(accountId)
             .flatMap { isExists ->
@@ -37,4 +41,7 @@ class ProfileServiceImpl(
 
     private fun existAccountByAccountId(accountId: Long) =
         accountRepository.existsById(accountId)
+
+    private fun existAccountByEmail(email: String) =
+        accountRepository.existsByEmail(email)
 }
