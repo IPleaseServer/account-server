@@ -57,6 +57,7 @@ dependencies {
     implementation ("org.springdoc:springdoc-openapi-webflux-ui:1.6.8")
     //spring cloud
     implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     //database driver
     implementation("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
