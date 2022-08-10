@@ -14,7 +14,7 @@ import site.iplease.accountserver.global.error.ErrorStatus
 class ProfileQueryControllerAdvice {
     @ExceptionHandler(UnknownAccountException::class)
     fun handle(e: UnknownAccountException): Mono<ResponseEntity<ErrorResponse>> =
-        ResponseEntity.ok(
+        ResponseEntity.badRequest().body(
             ErrorResponse(
                 status = ErrorStatus.UNKNOWN_ACCOUNT_ERROR,
                 message = e.getErrorMessage(),
