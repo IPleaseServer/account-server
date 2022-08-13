@@ -12,12 +12,12 @@ import site.iplease.accountserver.global.common.type.AccountType
 import site.iplease.accountserver.global.common.type.PermissionType
 
 @Service
-class RegisterServiceImpl(
+class LegacyRegisterServiceImpl(
     private val registerPolicyService: RegisterPolicyService,
     private val accountRepository: AccountRepository,
     private val passwordEncoder: PasswordEncoder,
     private val profileConverter: ProfileConverter
-): RegisterService {
+): LegacyRegisterService {
     override fun registerStudent(common: CommonRegisterDto, student: StudentAdditionalRegisterDto): Mono<Long> =
         registerPolicyService.checkCommonPolicy(common)//회원가입 정책을 검사한다.
             .flatMap { registerPolicyService.checkStudentPolicy(student) }

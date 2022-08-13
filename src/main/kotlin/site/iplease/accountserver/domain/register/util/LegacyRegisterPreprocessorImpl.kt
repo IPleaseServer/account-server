@@ -17,9 +17,9 @@ import site.iplease.accountserver.domain.register.exception.WrongDepartmentOrStu
 import site.iplease.accountserver.global.auth.exception.WrongEmailTokenException
 
 @Component
-class RegisterPreprocessorImpl(
+class LegacyRegisterPreprocessorImpl(
     private val authTokenDecoder: AuthTokenDecoder
-): RegisterPreprocessor {
+): LegacyRegisterPreprocessor {
     override fun valid(request: StudentRegisterRequest): Mono<Unit> =
         validEmailToken(request.emailToken) //이메일 토큰값을 검증한다.
             .flatMap { validDepartmentAndStudentNumber(request.department, request.studentNumber) } //학번과 학과를 검증한다.

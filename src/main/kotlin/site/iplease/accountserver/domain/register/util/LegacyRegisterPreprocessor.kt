@@ -7,7 +7,7 @@ import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegi
 import site.iplease.accountserver.domain.register.data.request.StudentRegisterRequest
 import site.iplease.accountserver.domain.register.data.request.TeacherRegisterRequest
 
-interface RegisterPreprocessor {
+interface LegacyRegisterPreprocessor {
     fun valid(request: StudentRegisterRequest): Mono<Unit>//요청정보를 검사한다.
     fun valid(request: TeacherRegisterRequest): Mono<Unit>//요청정보를 검사한다.
     fun decodeAndConvert(request: StudentRegisterRequest): Mono<Pair<CommonRegisterDto, StudentAdditionalRegisterDto>>//요청정보를 해독한다.
