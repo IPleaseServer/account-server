@@ -41,10 +41,10 @@ class RegisterController(
     (3)의 작업이 끝난 이후 StudentRegisteredEvent를 발행한다.
      */
     @PostMapping("/student")
-    fun registerStudent(@RequestBody @Valid request: StudentRegisterRequest): Mono<ResponseEntity<RegisterResponse>> =
+    fun registerStudent(@RequestBody request: StudentRegisterRequest): Mono<ResponseEntity<RegisterResponse>> =
         registerConverter.toValidationDto(request)
             .flatMap{ validationDto -> registerValidator.validate(validationDto) } //(1)요청정보를 검증한다.
-            .flatMap { validationDto -> registerConverter.toDto(validationDto) } //StudentRegisterDto를 구성한다.
+            .flatMap { validatedDto -> registerConverter.toDto(validatedDto) } //StudentRegisterDto를 구성한다.
             .flatMap { dto -> registerService.registerStudent(dto) } //(2)학생 회원가입 트랜잭션을 수행한다.
             .flatMap { dto ->
                 //이벤트 발행
