@@ -4,4 +4,5 @@ data class TeacherRegistrationDto (
     val name: String,
     val email: String,
     val encodedPassword: String,
+    val profileImageUrl: String,
 )

@@ -7,5 +7,6 @@ data class StudentRegistrationDto(
     val email: String,
     val encodedPassword: String,
     val studentNumber: Int,
-    val department: DepartmentType
+    val department: DepartmentType,
+    val profileImageUrl: String
 )

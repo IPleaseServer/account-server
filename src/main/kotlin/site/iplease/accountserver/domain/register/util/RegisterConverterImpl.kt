@@ -47,7 +47,7 @@ class RegisterConverterImpl: RegisterConverter {
             name = dto.name,
             email = dto.email,
             encodedPassword = dto.encodedPassword,
-            profileImageUrl = "",//todo
+            profileImageUrl = dto.profileImageUrl,
             studentNumber = dto.studentNumber,
             department = dto.department,
         ).toMono()
