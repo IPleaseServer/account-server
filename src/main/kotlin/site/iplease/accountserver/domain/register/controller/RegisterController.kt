@@ -11,8 +11,6 @@ import reactor.core.publisher.Mono
 import site.iplease.accountserver.domain.register.data.request.StudentRegisterRequest
 import site.iplease.accountserver.domain.register.data.request.TeacherRegisterRequest
 import site.iplease.accountserver.domain.register.data.response.RegisterResponse
-import site.iplease.accountserver.domain.register.util.LegacyRegisterPreprocessor
-import site.iplease.accountserver.domain.register.service.LegacyRegisterService
 import site.iplease.accountserver.domain.register.service.RegisterService
 import site.iplease.accountserver.domain.register.util.RegisterConverter
 import site.iplease.accountserver.domain.register.util.RegisterProcessor
@@ -23,8 +21,6 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/v1/account/register")
 class RegisterController(
-    private val legacyRegisterPreprocessor: LegacyRegisterPreprocessor,
-    private val legacyService: LegacyRegisterService,
     private val registerService: RegisterService,
     private val registerConverter: RegisterConverter,
     private val registerProcessor: RegisterProcessor,
@@ -60,9 +56,16 @@ class RegisterController(
 
     @PostMapping("/teacher")
     fun registerTeacher(@RequestBody @Valid request: TeacherRegisterRequest): Mono<ResponseEntity<RegisterResponse>> =
-        legacyRegisterPreprocessor.valid(request)
-            .flatMap { legacyRegisterPreprocessor.decodeAndConvert(request) }
-            .flatMap { legacyService.registerTeacher(it.first, it.second) }
-            .map { RegisterResponse(it) }
-            .map { ResponseEntity.ok(it) }
+        registerConverter.toValidationDto(request) //TeacherRegisterValidationDto를 구성한다.
+            .flatMap{ validationDto -> registerValidator.validate(validationDto) } //(1)요청정보를 검증한다.
+            .flatMap { validationDto -> registerProcessor.process(validationDto) } //(2)회원가입시 필요한 정보를 추출한다.
+            .flatMap { dto -> registerService.registerTeacher(dto) } //(3)강사 회원가입 트랜잭션을 수행한다.
+            .flatMap { dto ->
+                //이벤트 발행
+                registerConverter.toTeacherRegisteredEvent(dto) //TeacherRegisteredEvent를 구성한다.
+                    .map { event -> applicationEventPublisher.publishEvent(event) } //TeacherRegisteredEvent를 발행한다.
+                //응답값 반환
+                    .flatMap { registerConverter.toRegisterResponse(dto) } //(4) 응답값을 구성한다.
+                    .map { response -> ResponseEntity.ok(response) } //(5) 구성한 응답값을 반환한다.
+            }
 }
