@@ -22,7 +22,7 @@ class LegacyRegisterPreprocessorImpl(
 ): LegacyRegisterPreprocessor {
     override fun valid(request: StudentRegisterRequest): Mono<Unit> =
         validEmailToken(request.emailToken) //이메일 토큰값을 검증한다.
-            .flatMap { validDepartmentAndStudentNumber(request.department, request.studentNumber) } //학번과 학과를 검증한다.
+            .flatMap { validDepartmentAndStudentNumber(request.department, "${request.studentNumber}") } //학번과 학과를 검증한다.
 
     override fun valid(request: TeacherRegisterRequest): Mono<Unit> =
         validEmailToken(request.emailToken) //이메일 토큰값을 검증한다.
@@ -49,7 +49,7 @@ class LegacyRegisterPreprocessorImpl(
     override fun decodeAndConvert(request: StudentRegisterRequest): Mono<Pair<CommonRegisterDto, StudentAdditionalRegisterDto>> =
         decodeAuthToken(request.emailToken) //이메일토큰을 해독한다.
             .map { CommonRegisterDto(name = request.name, email = it.data, password = request.password) } //해독한 값들을 통해 CommonRegisterDto를 구성한다.
-            .map { it to StudentAdditionalRegisterDto(studentNumber = request.studentNumber.toInt(), department = request.department) } //해독한 값들을 통해 TeacherAdditionalRegisterDto를 구성하고 반환한다.
+            .map { it to StudentAdditionalRegisterDto(studentNumber = request.studentNumber, department = request.department) } //해독한 값들을 통해 TeacherAdditionalRegisterDto를 구성하고 반환한다.
 
     override fun decodeAndConvert(request: TeacherRegisterRequest): Mono<Pair<CommonRegisterDto, TeacherAdditionalRegisterDto>> =
         decodeAuthToken(request.emailToken) //이메일토큰을 해독한다.
