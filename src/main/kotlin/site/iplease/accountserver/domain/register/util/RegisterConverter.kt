@@ -18,4 +18,6 @@ interface RegisterConverter {
     fun toValidationDto(request: TeacherRegisterRequest): Mono<TeacherRegisterValidationDto>
     fun toTeacherRegisteredEvent(dto: TeacherDto): Mono<TeacherRegisteredEvent>
     fun toRegisterResponse(dto: TeacherDto): Mono<RegisterResponse>
+    fun toEntity(dto: TeacherRegistrationDto): Mono<Account>
+    fun toTeacherDto(savedEntity: Account): Mono<TeacherDto>
 }
