@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.register.data.dto.StudentRegisterValidationDto
-import site.iplease.accountserver.domain.register.exception.WrongDepartmentOrStudentNumberException
 import site.iplease.accountserver.global.common.exception.RuleViolationException
 import site.iplease.accountserver.global.common.type.DepartmentType
 import site.iplease.accountserver.global.common.type.RuleType
@@ -34,6 +33,6 @@ class StudentRegistrationRuleImpl: StudentRegistrationRule {
             .map { department.classes.contains(it) to it }
             .flatMap {
                 if(it.first) Unit.toMono()
-                else Mono.error(WrongDepartmentOrStudentNumberException("${it.second}반은 $department 학과의 반이 아닙니다!"))
+                else Mono.error(RuleViolationException(RuleType.REGISTER_DEPARTMENT, "${it.second}반은 $department 학과의 반이 아닙니다!"))
             }
 }
