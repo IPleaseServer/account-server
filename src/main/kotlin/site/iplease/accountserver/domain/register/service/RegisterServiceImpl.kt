@@ -1,34 +1,28 @@
 package site.iplease.accountserver.domain.register.service
 
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
-import site.iplease.accountserver.domain.profile.util.ProfileConverter
-import site.iplease.accountserver.domain.register.data.dto.CommonRegisterDto
-import site.iplease.accountserver.domain.register.data.dto.StudentAdditionalRegisterDto
-import site.iplease.accountserver.domain.register.data.dto.TeacherAdditionalRegisterDto
+import site.iplease.accountserver.domain.register.data.dto.StudentDto
+import site.iplease.accountserver.domain.register.data.dto.StudentRegistrationDto
+import site.iplease.accountserver.domain.register.data.dto.TeacherDto
+import site.iplease.accountserver.domain.register.data.dto.TeacherRegistrationDto
+import site.iplease.accountserver.domain.register.util.RegisterConverter
 import site.iplease.accountserver.global.common.repository.AccountRepository
-import site.iplease.accountserver.global.common.type.AccountType
-import site.iplease.accountserver.global.common.type.PermissionType
 
 @Service
 class RegisterServiceImpl(
-    private val registerPolicyService: RegisterPolicyService,
-    private val accountRepository: AccountRepository,
-    private val passwordEncoder: PasswordEncoder,
-    private val profileConverter: ProfileConverter
+    private val registerConverter: RegisterConverter,
+    private val accountRepository: AccountRepository
 ): RegisterService {
-    override fun registerStudent(common: CommonRegisterDto, student: StudentAdditionalRegisterDto): Mono<Long> =
-        registerPolicyService.checkCommonPolicy(common)//회원가입 정책을 검사한다.
-            .flatMap { registerPolicyService.checkStudentPolicy(student) }
-            .flatMap { profileConverter.toEntity(AccountType.STUDENT, PermissionType.USER, passwordEncoder.encode(common.password), common, student) }
-            .flatMap { accountRepository.save(it) }//구성한 회원정보를 저장한다.
-            .map { it.id }//저장한 회원정보의 id를 반환한다.
+    override fun registerStudent(dto: StudentRegistrationDto): Mono<StudentDto> =
+        registerConverter.toEntity(dto)
+            .map { it.copy(id=0) }
+            .flatMap { newEntity -> accountRepository.save(newEntity) }
+            .flatMap { savedEntity -> registerConverter.toStudentDto(savedEntity) }
 
-    override fun registerTeacher(common: CommonRegisterDto, teacher: TeacherAdditionalRegisterDto): Mono<Long> =
-        registerPolicyService.checkCommonPolicy(common)//회원가입 정책을 검사한다.
-            .flatMap { registerPolicyService.checkTeacherPolicy(teacher) }
-            .flatMap { profileConverter.toEntity(AccountType.TEACHER, PermissionType.OPERATOR, passwordEncoder.encode(common.password), common, teacher) }
-            .flatMap { accountRepository.save(it) }//구성한 회원정보를 저장한다.
-            .map { it.id }//저장한 회원정보의 id를 반환한다.
+    override fun registerTeacher(dto: TeacherRegistrationDto): Mono<TeacherDto> =
+        registerConverter.toEntity(dto)
+            .map { it.copy(id=0) }
+            .flatMap { newEntity -> accountRepository.save(newEntity) }
+            .flatMap { savedEntity -> registerConverter.toTeacherDto(savedEntity) }
 }

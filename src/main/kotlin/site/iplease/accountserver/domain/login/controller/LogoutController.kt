@@ -15,7 +15,7 @@ import site.iplease.accountserver.domain.login.service.LoginService
 class LogoutController(
     private val loginService: LoginService
 ) {
-    @DeleteMapping //TODO 나중에 UserDetailService 도입
+    @DeleteMapping
     fun logout(@RequestHeader authorization: String): Mono<ResponseEntity<Unit>> =
         loginService.logout(authorization.substring("Bearer ".length))
             .map { ResponseEntity.ok(it) }

@@ -1,8 +1,8 @@
-package site.iplease.accountserver.domain.register.data.request
+package site.iplease.accountserver.domain.register.data.dto
 
 import site.iplease.accountserver.global.common.type.DepartmentType
 
-data class StudentRegisterRequest (
+data class StudentRegisterValidationDto(
     val name: String,
     val emailToken: String,
     val password: String,
