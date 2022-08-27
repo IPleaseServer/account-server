@@ -22,9 +22,9 @@ class ProfileCommandController(
     private val profileService: ProfileService
 ) {
     @PutMapping("/password")
-    fun changePassword(@RequestHeader("X-Authorization-Id") accountId: Long, @RequestBody request: ChangePasswordRequest): Mono<ResponseEntity<Unit>> =
-        profileCommandPreprocessor.validate(accountId, request)
-            .flatMap { profileService.getProfileByEmailToken(request.emailToken) }
+    fun changePassword(@RequestBody request: ChangePasswordRequest): Mono<ResponseEntity<Unit>> =
+        profileService.getProfileByEmailToken(request.emailToken)
+            .flatMap { profileCommandPreprocessor.validate(it.accountId, request).map { _ -> it } }
             .flatMap { profileCommandService.changePassword(it.accountId, request.newPassword) }
             .map { ResponseEntity.ok(it) }
 
