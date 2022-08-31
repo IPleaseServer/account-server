@@ -82,7 +82,7 @@ class ProfileConverterImpl(
             name = request.name ?: account.name,
             email = email,
             profileImage = request.profileImage ?: URI.create(account.profileImageUrl),
-            studentNumber = request.studentNumber ?: account.studentNumber,
+            studentNumber = if(account.type == AccountType.TEACHER && request.type == AccountType.TEACHER) -1 else request.studentNumber ?: account.studentNumber,
             department = request.department ?: account.department,
         ) }
 

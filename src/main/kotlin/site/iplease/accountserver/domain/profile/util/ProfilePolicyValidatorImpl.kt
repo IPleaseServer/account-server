@@ -5,6 +5,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import site.iplease.accountserver.domain.profile.data.dto.ProfileDto
 import site.iplease.accountserver.global.common.exception.PolicyViolationException
+import site.iplease.accountserver.global.common.type.AccountType
 import site.iplease.accountserver.global.common.type.DepartmentType
 import site.iplease.accountserver.global.common.type.PolicyType
 import java.net.URI
@@ -16,7 +17,7 @@ class ProfilePolicyValidatorImpl: ProfilePolicyValidator {
         Unit.toMono()
             .flatMap { validateNamePolicy(profileDto.name) }
             .flatMap { validateProfileImagePolicy(profileDto.profileImage) }
-            .flatMap { validateStudentNumber(profileDto.studentNumber) }
+            .flatMap { if(profileDto.type == AccountType.STUDENT) validateStudentNumber(profileDto.studentNumber) else Unit.toMono()}
             .flatMap { validateDepartment(profileDto.department, profileDto.studentNumber) }
 
 
