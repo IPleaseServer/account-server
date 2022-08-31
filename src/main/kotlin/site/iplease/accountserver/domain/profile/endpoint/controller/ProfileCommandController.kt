@@ -29,7 +29,7 @@ class ProfileCommandController(
             .map { ResponseEntity.ok(it) }
 
     @PutMapping
-    fun updateMyProfile(@RequestHeader("X-Authorization-Id") accountId: Long, request: UpdateProfileRequest): Mono<ResponseEntity<ProfileResponse>> =
+    fun updateMyProfile(@RequestHeader("X-Authorization-Id") accountId: Long, @RequestBody request: UpdateProfileRequest): Mono<ResponseEntity<ProfileResponse>> =
         profileCommandPreprocessor.validate(accountId, request)
             .flatMap { profileCommandPreprocessor.convert(accountId, request) }
             .flatMap { dto -> profileCommandService.updateProfile(dto, accountId) }
