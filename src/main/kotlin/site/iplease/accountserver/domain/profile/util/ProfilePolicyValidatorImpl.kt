@@ -18,7 +18,7 @@ class ProfilePolicyValidatorImpl: ProfilePolicyValidator {
             .flatMap { validateNamePolicy(profileDto.name) }
             .flatMap { validateProfileImagePolicy(profileDto.profileImage) }
             .flatMap { if(profileDto.type == AccountType.STUDENT) validateStudentNumber(profileDto.studentNumber) else Unit.toMono()}
-            .flatMap { validateDepartment(profileDto.department, profileDto.studentNumber) }
+            .flatMap { if(profileDto.type == AccountType.STUDENT) validateDepartment(profileDto.department, profileDto.studentNumber) else Unit.toMono() }
 
 
     private fun validateDepartment(department: DepartmentType, studentNumber: Int): Mono<Unit> =
